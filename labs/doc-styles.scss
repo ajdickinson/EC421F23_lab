@@ -1,0 +1,221 @@
+@import url(https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i);
+@import url(https://cdn.rawgit.com/tonsky/FiraCode/1.204/distr/fira_code.css);
+@import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans+Condensed:wght@300;400;600;700&family=Noto+Sans:wght@200;300;400;600;700&family=Raleway:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap);
+// @import "node_modules/nord/src/nord.scss";
+
+// body {
+//   background-color: $nord0;
+//   color: $nord8;
+// }
+
+/*-- scss:defaults --*/
+$h2-font-size:          1.6rem !default;
+$headings-font-weight:  400 !default;
+// $body-color:             !default;
+$link-color:            #81A1C1;
+$code-color:            #4C566A;
+
+/*-- scss:rules --*/
+// h1, h2, h3, h4, h5, h6 {
+//   text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
+// }
+
+.middle {
+  vertical-align: middle;
+}
+.align-center {
+  text-align: center;
+}
+.align-left {
+  text-align: left;
+}
+
+.hi-note{
+  font-weight: 600;
+  color: #4c566a;
+  font-family: 'Zilla Slab' !important;
+}
+.note {
+  font-family: 'Zilla Slab' !important;
+}
+.note h1 {
+  font-family: 'Zilla Slab' !important;
+}
+.ex {
+  color: #ccc !important;
+  font-style: italic;
+}
+
+
+/* Exam Styling */
+.exam {
+  counter-reset: question;
+}
+
+/* Question Styling */
+.question {
+  display: inline-block;
+}
+
+// /* Sub-question Styling */
+// .part {
+//   padding-left: 1em;
+//   text-indent: -1em;
+// }
+
+/* Solution Styling */
+.solution {
+  color: #4C566A !important;
+  border-left: 0.5rem solid #dee2e6;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  padding-top: 0rem;
+}
+
+// /* Question Styling */
+// .question {
+//   counter-reset: sub-question;
+//   // padding-left: 1em;
+//   // text-indent: -1em;
+//   display: inline-block;
+// }
+
+// .question:before {
+//   counter-increment: question;
+//   content: "Q0" counter(question, zero) ": ";
+//   font-weight: 600;
+//   color: #4c566a;
+//   display: inline-block;
+// }
+
+// /* Sub-question Styling */
+// .part {
+//   counter-reset: sub-part;
+//   padding-left: 1em;
+//   text-indent: -1em;
+// }
+
+// .part:before {
+//   counter-increment: part;
+//   content: counter(part, lower-alpha) ") ";
+// }
+// .question{
+//   font-weight: 600;
+//   color: #4C566A;
+//   // font-family: monospace;
+// }
+
+// .question {
+//   counter-reset: question;
+//   padding-left: 1em;
+//   text-indent: -1em;
+//   font-weight: 600;
+//   color: #4C566A;
+// }
+
+// .question:before {
+//   counter-increment: question;
+//   content: "Question " counter(question) ": ";
+//   font-weight: bold;
+// }
+// .part{
+//   font-weight: 600;
+//   color: #81A1C1;
+//   padding-left: 10px;
+//   // font-family: monospace;
+// }
+// .solution {
+//   color: #4C566A !important;
+//   // border-top: 1px solid #dee2e6;
+//   border-left: 0.5rem solid #dee2e6;
+//   margin-left: 1rem;
+//   padding-left: 1rem;
+//   padding-top: 0rem;
+// }
+
+// .solution {
+//   padding: 10px;
+//   border: 1px solid #cccccc;
+//   background-color: #f9f9f9;
+//   margin-bottom: 20px;
+//   margin-top: 10px;
+// }
+.mono {
+  font-family: monospace;
+  background: #f8f8f8;
+}
+
+
+
+
+.h {
+  font-weight: 600;
+  color: #2e3440;
+}
+.hi {
+  font-weight: 600;
+  color: #4c566a
+}
+.hii {
+  font-weight: 600;
+  color: #81A1C1;
+}
+.hi-teal {
+  font-weight: 600;
+  color: #8FBCBB;
+}
+.hi-bb {
+  font-weight: 600;
+  color: #88C0D0;
+}
+
+.hp {
+  font-weight: 600;
+  color: #b48ead !important;
+}
+.hi-green {
+  font-weight: 600;
+  color: #A3BE8C;
+}
+.hi-red {
+  font-weight: 600;
+  color: #BF616A;
+}
+
+.hi-white {
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+
+.blue {
+  color: #81A1C1;
+}
+.purple {
+  color: #b48ead !important;
+}
+.green {
+  color: #A3BE8C;
+}
+.red {
+  color: #BF616A;
+}
+.teal {
+  color: #8FBCBB;
+}
+
+
+.small {
+  font-size:28px;
+}
+.tiny {
+  font-size:24px;
+}
+.big {
+  font-size: 38px;
+  font-weight: 600;
+}
+.realbig {
+  font-size: 60px;
+  font-weight: 600;
+}
