@@ -41,8 +41,6 @@ you can follow this [link](https://learnr-examples.shinyapps.io/ex-setup-r/#sect
 
 # R Basics
 
-Certainly! Adding a section on package management using both `library()` and `pacman::p_load()` can help your students understand the importance of utilizing external packages to expand R's capabilities. Here's how you can modify the Quarto document to include this new section:
-
 ## Package Management
 
 R's functionality can be extended through packages, which are collections of functions, data sets, and documentation bundled together. There are multiple ways to load packages in R, and we'll go over two common methods: using `library()` and `pacman::p_load()`.
