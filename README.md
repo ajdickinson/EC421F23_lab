@@ -11,16 +11,16 @@ Note: All lab section recordings can be found on Canvas under "Zoom Meetings"
 
 - Lab 00: Introduction to and R, R Markdown, and Andrew
 
-- Lab 02: The `tidyverse`
+- Lab 01: The `tidyverse`
 
-- Lab 03: `ggplot2` + heteroskedasticity
+- Lab 02: `ggplot2` + heteroskedasticity
 
-- Lab 04: MT review
+- Lab 03: MT review
 
-- Lab 05: `ggplot2` (part 2)
+- Lab 04: `ggplot2` (part 2)
 
-- Lab 06: Time series in R
+- Lab 05: Time series in R
 
-- Lab 07: Simulation exercises
+- Lab 06: Simulation exercises
 
-- Lab 08: Final review
+- Lab 07: Final review
