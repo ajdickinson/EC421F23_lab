@@ -1,0 +1,196 @@
+---
+title: "Lab 00: Introduction to R and Andrew"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include _macros.tex >}}
+$$
+:::
+
+# Introduction
+
+Welcome to the first lab session! This document aims to provide a refresher on R programming. Hopefully all this comes as a refresher!
+
+Today will be a quick and easy lab session. I would like to introduce myself, reintroduce some core concepts in R, talk about the plan this quarter, and briefly go over some basic $\LaTeX$ so you all can comfortably write some equations. 
+
+# Why R?
+
+R is a powerful language for statistical computing and data visualization, highly relevant for econometric analysis. We'll learn to use R to import, manipulate, and analyze data, and finally interpret and communicate results.
+
+# Installing R and RStudio
+
+Before diving in, make sure you have R and RStudio installed on your computer. If not, you can download them from the following websites:
+
+- R: [https://cran.r-project.org/](https://cran.r-project.org/)
+- RStudio: [https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/)
+
+Or...
+
+you can follow this [link](https://learnr-examples.shinyapps.io/ex-setup-r/#section-welcome) to get a video tutorial of how to install both.
+
+# R Basics
+
+## Package Management
+
+R's functionality can be extended through packages, which are collections of functions, data sets, and documentation bundled together. There are multiple ways to load packages in R, and we'll go over two common methods: using `library()` and `pacman::p_load()`.
+
+### Using `library()`
+
+The `library()` function is the standard way to load a package in R. Before you can use it, the package must be installed on your computer. You can install packages from CRAN (Comprehensive R Archive Network) using `install.packages()`.
+
+```{r}
+#| eval: false
+# To install the ggplot2 package
+install.packages("ggplot2")
+
+# To load the ggplot2 package
+library(ggplot2)
+```
+
+### Using `pacman::p_load()`
+
+`pacman` is a package management tool that simplifies package handling. One of its handy functions is `p_load()`, which automatically installs a package if it isn't already installed before loading it.
+
+First, you'll need to install the `pacman` package.
+
+```{r}
+#| eval: false
+# To install the pacman package
+install.packages("pacman")
+```
+
+Now you can use `p_load()` to seamlessly install and load packages.
+
+```{r}
+# To load the ggplot2 package, installing it first if necessary
+pacman::p_load(ggplot2)
+```
+
+The `p_load()` function can save you time and make your code more portable by ensuring that required packages are installed before trying to load them.
+
+
+## Variables and Data Types
+
+### Numeric Data Types
+
+```{r}
+# Assigning a number to a variable
+my_number = 42
+```
+
+### Character Data Types
+
+```{r}
+# Assigning a string to a variable
+my_string = "Hello, world!"
+```
+
+### Vectors
+
+```{r}
+# Creating a numeric vector
+my_vector = c(1, 2, 3, 4, 5)
+```
+
+### Data Frames
+
+```{r}
+# Creating a data frame
+my_data_frame = data.frame(
+  "ID" = c(1, 2, 3),
+  "Name" = c("Alice", "Bob", "Carol"),
+  "Score" = c(90, 85, 88)
+)
+```
+
+Or, if you prefer, we can use tibbles instead of data.frames
+
+```{r}
+# First load the tidyverse package
+pacman::p_load(tidyverse)
+
+# Creating a tibble
+my_tibble = tibble(
+  "ID" = c(1, 2, 3),
+  "Name" = c("Alice", "Bob", "Carol"),
+  "Score" = c(90, 85, 88)
+)
+```
+
+## Vectorized Operations
+
+Vectorized operations allow for more efficient code. For example, you can sum two vectors element-wise without explicitly writing a loop.
+
+```{r}
+# Element-wise addition of two vectors
+vector1 = c(1, 2, 3)
+vector2 = c(4, 5, 6)
+sum_vector = vector1 + vector2
+```
+
+# Introduction to LaTeX for Equation Writing in Econometrics
+
+LaTeX is a typesetting system commonly used in academia, particularly in disciplines that require the use of mathematical notation. While LaTeX can be used to create entire documents, it's also possible to use its math formatting capabilities within other environments, such as R Markdown or even Microsoft Word.
+
+## Why LaTeX for Econometrics?
+
+1. **Precision**: LaTeX allows for very precise control over mathematical symbols and equations.
+2. **Quality**: Equations are rendered in high quality, suitable for publication.
+3. **Standardization**: LaTeX is widely recognized in academia, making it easier to share your work.
+
+## Basic LaTeX Syntax for Equations
+
+### Inline Equations
+
+For inline equations, wrap your LaTeX code between single dollar signs (`$`).
+
+Example: The equation for a line is $y = mx + b$.
+
+### Displayed Equations
+
+For equations that should be displayed on their own line, wrap your LaTeX code between double dollar signs (`$$`).
+
+Example:
+$$
+y = \beta_0 + \beta_1 x_1 + \epsilon
+$$
+
+### Common Mathematical Symbols
+
+- Subscripts and Superscripts: `x_i`, `x^2`
+- Greek Letters: `\alpha`, `\beta`, `\gamma`
+- Summation: `\sum_{i=1}^{n} x_i`
+- Multiplication: `\times`, `\cdot`
+
+### Examples in Econometrics
+
+1. **Simple Linear Regression Model**:
+    $$
+    Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+    $$
+
+2. **Multiple Linear Regression Model**:
+    $$
+    Y_i = \beta_0 + \beta_1 X_{1i} + \beta_2 X_{2i} + \cdots + \beta_k X_{ki} + \epsilon_i
+    $$
+
+3. **Logarithmic Models**:
+    $$
+    \log(Y_i) = \beta_0 + \beta_1 X_i + \epsilon_i
+    $$
+
+Remember, LaTeX is case-sensitive. For instance, `\alpha` and `\Alpha` will produce different symbols.
+
+This brief introduction should equip you with the basic LaTeX skills needed for writing equations in your econometric problem sets. For a more in-depth guide, there are numerous online resources and tutorials available.
+

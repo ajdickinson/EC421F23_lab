@@ -1,0 +1,311 @@
+---
+title: "Lab 01: R Markdown and linear models"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - ../doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include ../_macros.tex >}}
+$$
+:::
+
+> Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away. <br> - _Antoine de Saint-Exupéry_
+
+
+# Introduction to R Markdown for Econometrics
+
+As part of the course, you will be using R Markdown for your assignments. This document will provide a brief overview of what R Markdown is and how to effectively use it for your homework assignments and problem sets.
+
+
+## What is R Markdown?
+
+R Markdown is a file format for making dynamic documents with R. An R Markdown document is written in [markdown]{.hi}, an easy-to-write plain text format, and interwoven with R code for producing well-documented, reproducible research. 
+
+
+## Basic Structure
+
+An R Markdown document is divided into chunks of text, code, and YAML metadata.
+
+1. **Text**:
+   - Text is written in markdown syntax.
+  
+2. **R Code Chunks**:
+   - R code chunks are enclosed within \``{r}\`` and \```. 
+   - These chunks allow you to run R code and display the results within your document.
+
+3. **YAML Metadata**:
+   - At the beginning of every R Markdown document, there's a section enclosed by `---` at the top and bottom. This is the YAML metadata section.
+   - YAML stands for "Yet Another Markup Language" or sometimes "YAML Ain't Markup Language." It's a human-readable data format.
+   - In R Markdown, the YAML metadata typically contains settings that dictate how the document is rendered. Examples include the title of the document, the author's name, the desired output format (e.g., HTML, PDF, or Word), and many other potential options.
+   - An example YAML header might look like:
+
+     ```markdown
+     ---
+     title: "My Analysis"
+     author: "John Doe"
+     date: "October 9, 2023"
+     output: html_document
+     ---
+     ```
+
+With these three components—markdown text, R code chunks, and YAML metadata—you can create dynamic, well-structured, and reproducible documents using R Markdown. However, in this class, the YAML will always be provided for assignments. _You just have to add your name_.
+  
+
+## Getting Started
+
+1. To create a new R Markdown file, in RStudio, click on `File` > `New File` > `R Markdown...`.
+
+![](images/new_Rmd.png)
+
+2. You'll see a dialog box. Choose the title and author for your document. You can keep the default output format as `HTML`.
+
+![](images/new_Rmd2.png)
+
+3. Click `OK` and a template R Markdown file will appear.
+
+![](images/new_Rmd3.png)
+
+The new document will use a template with some more information about how to knit using the knit button as well as information on code chunks.
+
+### Writing Text
+
+Markdown is a lightweight markup language. Here are some basics:
+
+- Headers are created using `#`. More `#`s indicate a lower level header.
+  
+  ```markdown
+  # This is a Level 1 Header
+  ## This is a Level 2 Header
+  ### This is a Level 3 Header
+  ```
+
+- Lists are easy:
+
+  ```markdown
+  - Item 1
+  - Item 2
+  ```
+
+- For emphasis, use `*italics*` for *italics* and `**bold**` for **bold**.
+
+#### LaTeX for Equations:
+- R Markdown supports LaTeX, a typesetting system that's great for formatting complex mathematical equations.
+- To write inline equations, wrap your equation with `$` on both sides. For example, `$y = mx + b$` will render as $y = mx + b$.
+- For standalone equations, wrap your equation with `$$` on both sides. This centers the equation on its own line.
+  ```markdown
+  $$
+  y = \beta_0 + \beta_1 x + \epsilon
+  $$
+  ```
+  This will render as:
+  $$
+  y = \beta_0 + \beta_1 x + \epsilon
+  $$
+
+### Embedding R Code
+
+To embed R code into your document, wrap the code with \``{r}\`` and \```. 
+
+[Ex.]{.ex}
+
+\```{r} <br>
+library(tidyverse) <br>
+mtcars %>% select(mpg) %>% summary() <br>
+\```
+
+will provide a summary of the `mpg` column in the `mtcars` dataset.
+
+```{r}
+library(tidyverse)
+
+mtcars %>% select(mpg) %>% summary()
+```
+
+Notice that two outputs seemed to have been printed as a result of the code block. The result of the code is printed below the code block, but so is a message that occurred when loading the `tidyverse`.
+
+Code chunks come with a variety of options to choose from. They can be added at the top of a code chunk, within the curly braces:
+
+\```{r, OPTIONS GO HERE} <br>
+mtcars %>% select(mpg) %>% summary() <br>
+\```
+
+[Ex:]{.ex} Suppose you do not want output messages muddying up your knitted document, then we can use the `message` option to hide messages by setting `message = FALSE` in the code chunk:
+
+```{r, message = FALSE}
+library(tidyverse)
+
+mtcars %>% select(mpg) %>% summary()
+```
+
+Notice that the message from 
+
+Here is a non-exhaustive list of options that I use most often.
+
+- **`eval`**:
+  - Determines if the code in the chunk is evaluated.
+  - Values: `TRUE` (default) or `FALSE`.
+
+- **`echo`**:
+  - Determines if the code in the chunk is displayed in the output document.
+  - Values: `TRUE` (default) or `FALSE`.
+
+- **`results`**:
+  - Controls how the results are displayed.
+  - Values:
+    - `'markup'` (default): Results are marked up (e.g., figures get `figure` environment in LaTeX).
+    - `'hide'`: Results are created and stored, but not displayed.
+    - `'asis'`: Results are displayed as-is.
+    - `'hold'`: All output pieces are held until the end, then printed all at once.
+
+- **`message`**:
+  - Determines if messages from the code evaluation are displayed.
+  - Values: `TRUE` or `FALSE` (default).
+
+- **`warning`**:
+  - Determines if warnings from the code evaluation are displayed.
+  - Values: `TRUE` (default) or `FALSE`.
+
+- **`fig.cap`**:
+  - Provides a caption for figures generated by this chunk.
+  - Value: A character string.
+
+- **`fig.height`** and **`fig.width`**:
+  - Specify the height and width of the plot/figure.
+  - Value: Numeric (default is `7` for both).
+
+- **`cache`**:
+  - Determines if the chunk should be cached.
+  - Values: `TRUE` or `FALSE` (default).
+  - Useful for chunks that take a long time to evaluate. Once cached, R Markdown won't re-evaluate the chunk unless its content changes.
+
+- **`include`**:
+  - Determines if the chunk is included in the final document.
+  - Values: `TRUE` (default) or `FALSE`.
+  - Even if set to `FALSE`, the code is still evaluated if `eval=TRUE`.
+
+
+## Homework Assignments and Problem Sets
+
+When working on assignments:
+
+1. **Embed your R code**: Ensure all your econometric analyses are embedded within the document. This ensures transparency in how you derived your results.
+
+2. **Comment on results**: After running your analyses, always provide a narrative or commentary on what the results mean in the context of your problem.
+
+3. **Exporting your work**: Once you are done, click on the `Knit` button in RStudio to convert your R Markdown file to your desired output format. `html` is very easy to submit to Canvas and is my recommendation. `pdf` output requires extra steps is is more difficult to get up and running.
+
+<br>
+<br>
+
+# [Ex:]{.ex} Homework question
+
+We are going to learn how to use R Markdown to write our homework [and]{.hi} by doing a fake homework question together. This will also serve as instruction for three important (base) functions for running regressions. The three functions are:
+
+- __`lm`__: 
+  - *Description**: Stands for "linear model." It is used to fit linear models to data. The function calculates the coefficients of a linear equation, involving one or multiple predictors that best predict the outcome (dependent variable). 
+  - [Ex.]{.ex} `model = lm(y ~ x, data = data)`
+
+- __`resid`__: 
+  - *Description*: Extracts the residuals from a model. Residuals represent the difference between the observed value and the value predicted by the model.
+  - [Ex.]{.ex} `model_residuals = resid(model)`
+
+- __`predict`__: 
+  - *Description*: Given a model and new data, this function produces predicted values based on the model's coefficients. It's often used to see how well a model performs on new, unseen data or to predict outcomes for specific input values.
+  - [Ex.]{.ex} `predicted_values = predict(model, newdata = new_data)`
+
+
+Understanding these three functions will serve as a solid foundation for conducting regression analyses in R.
+
+Before we begin, we'll need to generate the data with the following
+
+```{r}
+#| message: false
+# Load the tidyverse
+pacman::p_load(tidyverse, broom)
+# Set random seed to ensure results are consistent
+set.seed(42)
+
+# Generating data
+  # Number of observations
+  n = 200  
+  # Years of education as random variable, mean 12 years, standard deviation 2 years
+  years_of_education = rnorm(n, mean=12, sd=2)
+  # Income as a random variable
+  income = 5000 + 2000*years_of_education + rnorm(n, mean=0, sd=500 + 250*years_of_education)
+
+# Create a tibble
+tbl = tibble(years_of_education, income)
+```
+
+[Q1.]{.question} **Data Exploration:**
+
+- Create a scatter plot with `years_of_education` on the x-axis and `income` on the y-axis. What does the relationship between the two variables look like?
+
+<!-- ```{r}
+plot(tbl)
+``` -->
+
+
+[Q2.]{.question} **Simple Linear Regression:**
+
+- Write the proper formula that describes the standard wage regression.
+
+<!-- $$
+\text{Income}_i = \alpha + \beta \; \text{YearsEdu}_i + \varepsilon_i
+$$ -->
+
+- Using the `lm` function, run a regression of `income` on `years_of_education`. Assign your linear model to a variable called `model`.  
+
+<!-- ```{r}
+model = lm(income ~ years_of_education, data = tbl)
+``` -->
+
+[Q3.]{.question} **Model Summary:**
+
+- Extract and interpret the coefficients of the regression using the `broom` package function `tidy`
+
+<!-- ```{r}
+tidy(model)
+``` -->
+
+- What does the coefficient of `years_of_education` tell you about the relationship between education and income?
+
+<!-- For each additional year of education, there is an associated increase in income by \$1865 -->
+
+- Are the coefficients statistically significant at the 5% level? Provide evidence for your answer.
+
+<!-- Yes, the we can reject the null hypothesis that year of education has no correlation with income since the p value is $3.65e-34$ which is $< 0.05$ -->
+
+[Q4.]{.question} **Residuals:**
+
+- Suppose we are worried about heteroskedasticity. What is a simple, not so scientific way to check for heteroskedastic errors?
+
+<!-- A quick and dirty check is to plot the residuals across $x$ (or in this case years of education) -->
+
+- Plot the residuals and discuss
+
+<!-- ```{r}
+model_resid = resid(model)
+
+plot(tbl$years_of_education, model_resid, 
+     xlab="Years of Education", ylab="Residuals", 
+     main="Residuals vs Years of Education")
+``` -->
+
+
+[Q5.]{.question} **Predictions:**
+
+- Use the `predict` function to estimate the income of an individual with 10, 14, and 18 years of education.   
+
+## Conclusion
+
+R Markdown is a powerful tool for integrating your analyses with your report. It encourages reproducible research and ensures your results and interpretations are always aligned. Make good use of it in your assignments and always ensure clarity and transparency in your work.
