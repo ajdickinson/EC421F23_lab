@@ -1,5 +1,5 @@
 ---
-title: "Lab00: Introduction to R and Andrew"
+title: "Lab 00: Introduction to R and Andrew"
 subtitle: "Andrew Dickinson"
 self-contained: TRUE
 format:

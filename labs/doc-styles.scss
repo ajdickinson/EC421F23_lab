@@ -15,6 +15,32 @@ $headings-font-weight:  400 !default;
 $link-color:            #81A1C1;
 $code-color:            #4C566A;
 
+// Nord theme (https://www.nordtheme.com/)
+
+  // Polar night
+  $polar-night-1: #2E3440;
+  $polar-night-2: #2E3440;
+  $polar-night-3: #2E3440;
+  $polar-night-4: #2E3440;
+
+  // Snow storm
+  $snow-storm-1: #D8DEE9;
+  $snow-storm-2: #E5E9F0;
+  $snow-storm-3: #ECEFF4;
+
+  // Frost
+  $frost-1: #8FBCBB;
+  $frost-2: #88C0D0;
+  $frost-3: #81A1C1;
+  $frost-4: #5E81AC;
+
+  // Aurora
+  $red: #BF616A;
+  $orange: #D08770;
+  $yellow: #EBCB8B;
+  $green: #A3BE8C;
+  $purple: #B48EAD;
+
 /*-- scss:rules --*/
 // h1, h2, h3, h4, h5, h6 {
 //   text-shadow: -1px -1px 0 rgba(0, 0, 0, .3);
@@ -53,9 +79,9 @@ $code-color:            #4C566A;
 }
 
 /* Question Styling */
-.question {
-  display: inline-block;
-}
+// .question {
+//   display: inline-block;
+// }
 
 // /* Sub-question Styling */
 // .part {
@@ -99,11 +125,11 @@ $code-color:            #4C566A;
 //   counter-increment: part;
 //   content: counter(part, lower-alpha) ") ";
 // }
-// .question{
-//   font-weight: 600;
-//   color: #4C566A;
-//   // font-family: monospace;
-// }
+.question{
+  font-weight: 600;
+  color: $frost-1;
+  // font-family: monospace;
+}
 
 // .question {
 //   counter-reset: question;
