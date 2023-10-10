@@ -39,7 +39,7 @@ An R Markdown document is divided into chunks of text, code, and YAML metadata.
    - Text is written in markdown syntax.
   
 2. **R Code Chunks**:
-   - R code chunks are enclosed within \``{r}\`` and \```. 
+   - R code chunks are enclosed within \```{r} and \```. 
    - These chunks allow you to run R code and display the results within your document.
 
 3. **YAML Metadata**:

@@ -1,0 +1,120 @@
+---
+title: "Ex. Assignment Solutions"
+author: "Andrew"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, broom)
+```
+
+# [Ex:]{.ex} Homework question
+
+We are going to learn how to use R Markdown to write our homework [and]{.hi} by doing a fake homework question together. This will also serve as instruction for three important (base) functions for running regressions. The three functions are:
+
+- __`lm`__: 
+  - *Description**: Stands for "linear model." It is used to fit linear models to data. The function calculates the coefficients of a linear equation, involving one or multiple predictors that best predict the outcome (dependent variable). 
+  - [Ex.]{.ex} `model = lm(y ~ x, data = data)`
+
+- __`resid`__: 
+  - *Description*: Extracts the residuals from a model. Residuals represent the difference between the observed value and the value predicted by the model.
+  - [Ex.]{.ex} `model_residuals = resid(model)`
+
+- __`predict`__: 
+  - *Description*: Given a model and new data, this function produces predicted values based on the model's coefficients. It's often used to see how well a model performs on new, unseen data or to predict outcomes for specific input values.
+  - [Ex.]{.ex} `predicted_values = predict(model, newdata = new_data)`
+
+
+Understanding these three functions will serve as a solid foundation for conducting regression analyses in R.
+
+Before we begin, we'll need to generate the data with the following
+
+```{r}
+# Set random seed to ensure results are consistent
+set.seed(42)
+
+# Generating data
+  # Number of observations
+  n = 200  
+  # Years of education as random variable, mean 12 years, standard deviation 2 years
+  years_of_education = rnorm(n, mean=12, sd=2)
+  # Income as a random variable
+  income = 5000 + 2000*years_of_education + rnorm(n, mean=0, sd=500 + 250*years_of_education)
+
+# Create a tibble
+tbl = tibble(years_of_education, income)
+```
+
+[Q1.]{.question} **Data Exploration:**
+
+- Create a scatter plot with `years_of_education` on the x-axis and `income` on the y-axis. What does the relationship between the two variables look like?
+
+```{r}
+plot(tbl, xlab="Years of Education", ylab="Income", 
+     main="Income vs Years of Education")
+```
+
+
+[Q2.]{.question} **Simple Linear Regression:**
+
+- Write the proper formula that describes the standard wage regression.
+
+$$
+\text{Income}_i = \alpha + \beta \; \text{YearsEdu}_i + \varepsilon_i
+$$
+
+- Using the `lm` function, run a regression of `income` on `years_of_education`. Assign your linear model to a variable called `model`.  
+
+```{r}
+model = lm(income ~ years_of_education, data = tbl)
+```
+
+[Q3.]{.question} **Model Summary:**
+
+- Extract and interpret the coefficients of the regression using the `broom` package function `tidy`
+
+```{r}
+tidy(model)
+```
+
+- What does the coefficient of `years_of_education` tell you about the relationship between education and income?
+
+For each additional year of education, there is an associated increase in income by \$1865
+
+- Are the coefficients statistically significant at the 5% level? Provide evidence for your answer.
+
+Yes, the we can reject the null hypothesis that year of education has no correlation with income since the p value is $3.65e-34$ which is $< 0.05$
+
+[Q4.]{.question} **Residuals:**
+
+- Suppose we are worried about heteroskedasticity. What is a simple, not so scientific way to check for heteroskedastic errors?
+
+A quick and dirty check is to plot the residuals across $x$ (or in this case years of education)
+
+- Plot the residuals and discuss
+
+```{r}
+model_resid = resid(model)
+
+plot(tbl$years_of_education, model_resid, 
+     xlab="Years of Education", ylab="Residuals", 
+     main="Residuals vs Years of Education")
+```
+
+
+[Q5.]{.question} **Predictions:**
+
+- Use the `predict` function to estimate the income of an individual with 10, 14, and 18 years of education.   
+- How do these predictions compare with the original simulated relationship?  
+
+```{r}
+new_tbl = tibble(years_of_education = c(10, 14, 18))
+predicted_income = predict(model, newdata = new_tbl)
+
+new_tbl %>% mutate(prediction = predicted_income)
+
+
+```
+
