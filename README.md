@@ -15,6 +15,7 @@ Lab 00: Introduction to and R, R Markdown, and Andrew
 Lab 01: R Markdown and linear models
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab01/lab01.html)
 - [R Markdown example](https://ajdickinson.github.io/EC421F23_lab/labs/lab01/ex.Rmd)
+- [What to do when your R Markdown file does not knit](https://ajdickinson.github.io/EC421F23_lab/labs/Rmarkdown-trouble.qmd))
 
 Lab 02: The `tidyverse`
 
