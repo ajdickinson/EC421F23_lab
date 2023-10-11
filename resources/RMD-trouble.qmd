@@ -1,0 +1,46 @@
+---
+title: "What to do when your R Markdown file does not knit"
+author: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - doc-styles.scss
+    toc: FALSE
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+If your R Markdown file fails to knit in RStudio, consider the following general steps to identify and resolve the issue. The [first two steps are crucial]{.hi}---95% of all issues can be solved by reading the error message and carefully testing each coding chunk one at a time.
+
+1. [Check the error message:]{.hi}
+
+- Carefully read the error message displayed in the console or the "R Markdown" tab in RStudio. This will often provide specific information on what went wrong and where the issue is located in your R Markdown file.
+- Reading error messages are hard! It is a skill that you will learn if you use R more and more. Use resources that are available to you. Copy error message to google and/or LLM.
+
+2. [Examine code chunks:]{.hi}
+
+- Run each code chunk individually: Execute each code chunk by clicking the "Run" button or using the "Cmd + Shift + Enter" (Mac) or "Ctrl + Shift + Enter" (Windows/Linux) keyboard shortcut. This will help you identify the problematic chunk.
+- Check for syntax errors: Review your code for any syntax errors or typos.
+- Manage variables and objects: Ensure variables are defined and initialized before being used, and avoid using the same name for different objects.
+- The R Markdown templates posted on Canvas have been checked and should work. So we start with a fresh document and work backwards. Slowly add your code chunks and make sure the document knits after every new chunk.
+
+3. [Reset the R session:]{.hi}
+
+- Under the "Session" tab on RStudio, click the restart R. This will wipe your R session and all object will be gone. Try to run every chunk one at a time to locate where the error is occurring.
+
+3. [Check YAML header:]{.hi}
+
+- Make sure you did not accidentally change any of the settings in the header (YAML)
+
+4. [Restart RStudio session:]{.hi}
+
+- If the issue persists, try knitting the R Markdown file on another system or in a new RStudio session to rule out local configuration issues.
+
+5. [Verify your R setup:]{.hi}
+
+- Update R, RStudio, and packages: Ensure you have the latest versions of R, RStudio, and the required packages installed.
+- Load required packages: Make sure all necessary packages are installed and loaded using the library() function.
+
+6. [Seek assistance from the GE during lab or via email.]{.hi} If you're still unable to resolve the issue, reach out to Andrew either after class or via email
