@@ -3,7 +3,7 @@
 Lab section instructor: Andrew Dickinson
 
 - Schedule: Tu 4:00-4:50p ([zoom link](https://uoregon.zoom.us/j/92718572857))
-- Andrew's office hours: Th, 3-4p ([zoom link](https://uoregon.zoom.us/j/95065988487))
+- Andrew's office hours: Th, 4-5p ([zoom link](https://uoregon.zoom.us/j/95065988487))
 
 Note: All lab section recordings can be found on Canvas under "Zoom Meetings"
 
