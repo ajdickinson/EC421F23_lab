@@ -1,0 +1,523 @@
+
+---
+title: "Lab 02: Introduction to the `tidyverse`"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - ../doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include ../_macros.tex >}}
+$$
+
+```{r}
+pacman::p_load(tidyverse, nycflights13)
+```
+:::
+
+# Overview
+
+The `tidyverse` is a collection of R packages that work in harmony for data science. They are designed to be human-readable and facilitate data import, transformation, visualization, and modeling. Establishing a working understanding of the `tidyverse` can serve as a broad foundational understanding of data science principles in R.
+
+The main packages in the `tidyverse` include:
+
+- `ggplot2`: For data visualization
+- `dplyr`: For data manipulation
+- `tidyr`: For cleaning and reshaping data
+- `readr`: For reading data into R
+- `purrr`: For functional programming
+- `tibble`: A modern approach to data frames
+- `stringr`: For string manipulation
+- `forcats`: For working with factors
+
+## Philosophy: Tidy Data
+
+The `tidyverse` has a specific philosophy regarding 'tidy data'. A dataset is tidy when:
+
+- Each variable is a column
+- Each observation is a row
+- Each value is a cell
+
+This structure makes it easier to manipulate, visualize, and model your data.
+
+## Flights
+<a id="flights"></a>
+
+Before we get into the nitty-gritty details of `dplyr`, I want to introduce the dataset that we will use for the examples and the practices questions. The `flights` dataset is a large data frame that contains information about domestic flights that departed from New York City in 2013. The dataset has various columns like providing various details about each flight. For descriptions of each variable, see the [table](#flights-table) in the appendix. This dataset provides a comprehensive look at flight data, making it an excellent resource for data manipulation and analysis exercises.
+
+To use the `flights` dataset, you need to install and load the `nycflights13` package, which contains this and other related datasets. You can install it from CRAN by running `install.packages("nycflights13")`. 
+
+```{r}
+# Load the nycflights13 package
+pacman::p_load(nycflights13)
+```
+
+After installing, the `head` function will print the first 6 (or however many you would like), giving you a glimpse of the dataset.
+
+```{r}
+# The flights dataset is now loaded and can be viewed
+head(flights)
+```
+
+
+[Note:]{.note} Not all columns are shown above with the `head` function. One of the quirks associated with tibbles ([imo]{.note}). In order to become more acquainted with all the variables in the data, an alternative to the `head` function is `glimpse`.
+
+```{r}
+glimpse(flights)
+```
+
+`glimpse` effectively turns the tibble on its side and prints each column as a row, as well as the first few observations. One of the more useful functions for data exploration.
+
+
+# Focus: `dplyr` 
+
+> _What is `dplyr`?_
+
+`dplyr` is one of the most popular packages in R for data manipulation. It is the most common and widely considered "best" starting place when learning data manipulation fundamentals in R. It offers a set of "verbs" to carry out essential data manipulation operations and is designed to be both flexible and intuitive.
+
+[Core verbs:]{.hi} The power of `dplyr` comes from its core verbs that simplify data manipulation tasks. Here are the primary ones:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- `mutate`  
+- `filter`
+- `arrange`
+:::
+
+::: {.column width="50%"}
+- `select`
+- `group by`
+- `summarize` (or `summarise` if you call soccer football)
+:::
+
+::::
+
+
+## `select`
+
+### Basic information
+
+The `select` function in `dplyr` is used to select columns from a data frame, effectively subsetting the data to include only variables of interest. This is especially useful when you're dealing with wide datasets with many variables, and you want to focus only on a few.
+
+**Syntax**:
+
+```R
+select(data, column1, column2, ...)
+```
+
+Here, `column1`, `column2`, etc., are the names of the columns you want to keep.
+
+[Features:]{.hi}
+
+- [Column Selection:]{.note} Keep only the columns you need.
+- [Reordering:]{.note} Rearrange the order of the columns.
+- [Renaming:]{.note} Can be combined with `rename` to rename columns in the output.
+- [Column Removal:]{.note} Use `-` to exclude specific columns.
+  <!-- - [Ex.]{.ex} `select(data, -column1)` removes `column1` from `data` -->
+
+### [Ex.]{.ex}
+
+[Select Specific Columns]{.hi}
+
+If you're only interested in the departure and arrival times of the flights, you can use `select` to keep only those columns:
+
+```{r}
+subset_flights = select(flights, dep_time, arr_time)
+
+subset_flights
+```
+
+[Rearrange Columns]{.hi}
+
+You can rearrange the order of the columns simply by changing their order in the `select` function:
+
+```{r}
+subset_flights = select(flights, arr_time, dep_time)
+
+subset_flights
+```
+
+[Exclude Columns]{.hi}
+
+If you want all columns except for a few, you can use `-`:
+
+```{r}
+subset_flights = select(flights, -year, -month, -day)
+
+subset_flights
+```
+
+### Practice questions
+
+Here are some practice questions based on the `flights` dataset from the [R for Data Science book](https://r4ds.had.co.nz/transform.html#select):
+
+1. **Select Time Columns**: Use `select` to create a new data frame that includes only the columns related to time (`dep_time`, `sched_dep_time`, `arr_time`, `sched_arr_time`).
+
+2. **Select Location Columns**: Use `select` to create a new data frame that contains only the origin and destination airports.
+
+3. **Drop ID Columns**: Create a new data frame that contains all columns except for `year`, `month`, and `day`.
+
+These practice questions should give you a solid understanding of how to use `select` for column selection and reordering in the `flights` dataset.
+
+## `mutate`
+
+### Basic information
+
+The `mutate` function is used to add new variables to a dataset or to modify existing variables. It's one of the most commonly used "verbs" in `dplyr`. The basic syntax is:
+
+```{R}
+#| eval: false
+mutate(data, new_variable = expression)
+```
+
+Here, `new_variable` is the name you want to assign to the new column, and `expression` is the calculation used to generate the new variable. 
+
+[Features:]{.hi}
+
+- [Column Operations:]{.note} Create new columns based on existing ones
+- [Function Application:]{.note} Apply any R function to existing columns to create a new column
+- [In-place Modification:]{.note} While `mutate` does not modify the original data frame, it's often used in a dplyr chain to alter data on-the-fly
+
+### [Ex.]{.ex}
+
+Let's consider a simple data frame containing two variables, `x` and `y`.
+
+```{r}
+library(tidyverse)
+
+# Create a tibble
+tbl = tibble(x = 1:5, y = 6:10)
+
+tbl
+```
+
+```{r}
+# Add a new column `z` which is the sum of `x` and `y`
+tbl = mutate(tbl, z = x + y)
+
+tbl
+```
+
+Now, the data frame will have a new column `z` containing the sum of `x` and `y`.
+
+[Using functions]{.hi}
+
+You can also use R functions within `mutate`.
+
+```{r}
+# Create a new column `log_x` containing the logarithm of `x`
+tbl = mutate(tbl, log_x = log(x))
+
+tbl
+```
+
+[Multiple operations]{.hi}
+
+You can perform multiple operations within a single `mutate` function.
+
+```{r}
+# Create new columns `sqrt_x` and `diff_xy`
+tbl = mutate(tbl, sqrt_x = sqrt(x), diff_xy = x - y)
+
+tbl
+```
+
+[Create a `speed` Column]{.hi}
+
+Let's say you want to calculate the speed of each flight. You can create a new variable `speed` which would be `distance` divided by `air_time`.
+
+```{r}
+flights = mutate(flights, speed = distance / air_time * 60)
+```
+
+#### Gain/Loss in Departure Times
+
+To calculate how much time was gained or lost during the flight, you can subtract `sched_dep_time` from `dep_time`.
+
+```{r}
+flights = mutate(flights, time_gain = dep_time - sched_dep_time)
+```
+
+### Practice questions
+
+Here are some practice questions based on the `flights` dataset from the [R for Data Science book](https://r4ds.had.co.nz/transform.html#add-new-variables-with-mutate).
+
+1. **Flight Duration**: Use `mutate` to create a new variable called `flight_duration` which is the difference between `arr_time` and `dep_time`.
+
+2. **Hourly Delay**: Use `mutate` to create a new variable `hourly_delay` that is calculated as `arr_delay / air_time * 60`.
+
+3. **Temperature Range**: The dataset has columns `temp` and `dewp` for temperature and dew point, respectively. Use `mutate` to create a new column `temp_range` which is the difference between these two measurements.
+
+These questions should give you a good practice on how to use the `mutate` function effectively for data manipulation with the `flights` dataset.
+
+
+## `filter`
+
+### Basic Information
+
+The `filter` function in `dplyr` is used for subsetting a data frame, retaining only the rows that meet certain conditions. This operation is crucial when you're interested in analyzing only a specific subset of your data based on one or more criteria.
+
+[Syntax:]{.hi}
+
+```R
+filter(data, condition1, condition2, ...)
+```
+
+Here, `data` is the data frame you're working with, and `condition1, condition2, ...` are the conditions you want to apply.
+
+### [Ex.]{.ex}
+
+To demonstrate, let's use the `flights` dataset. Suppose you want to filter the data to only include flights that were delayed by more than 30 minutes.
+
+```{r}
+delayed_flights = filter(flights, dep_delay > 30)
+delayed_flights = select(delayed_flights, dep_delay)
+
+delayed_flights
+```
+
+You can also combine multiple conditions using logical operators like `&` (and) or `|` (or).
+
+For example, if you're interested in flights that were delayed by more than 30 minutes and traveled a distance of more than 1000 miles:
+
+```{r}
+long_delayed_flights = filter(flights, dep_delay > 30 & distance > 1000)
+long_delayed_flights = select(long_delayed_flights, dep_delay)
+
+long_delayed_flights
+```
+
+## Practice questions
+
+To reinforce your understanding, try solving these practice questions based on the `flights` dataset:
+
+1. Filter the `flights` data to include only flights operated by the carrier "UA" (United Airlines). How many such flights are there?
+    - Hint: Use `nrow()` to find the number of rows in the filtered dataset.
+  
+2. Filter the `flights` dataset to only include flights that departed from JFK and were delayed by less than 15 minutes. What is the average distance traveled by these flights?
+    - Hint: Use `summarize()` to find the average distance.
+
+3. Filter the `flights` data to include flights that either departed from LGA and arrived at ORD, or departed from JFK and arrived at SFO. How many such unique routes are there?
+    - Hint: Use `distinct()` to find unique routes based on the `origin` and `dest` columns.
+
+These questions are designed to give you a deeper understanding of how to use `filter` to subset your data based on specific conditions.
+
+## `group_by` + `summarize`
+
+### Basic information
+
+The `group_by` and `summarize` functions in `dplyr` are often used in conjunction to perform grouped data analyses. The `group_by` function is used to group the rows of a data frame by one or multiple variables. Once the data is grouped, the `summarize` function can be used to perform summary calculations on each group, such as computing means, sums, counts, etc.
+
+[Syntax for `group_by`:]{.hi}
+
+```R
+grouped_data = group_by(data, variable1, variable2, ...)
+```
+
+Here, `data` is the data frame you're working with, and `variable1, variable2, ...` are the variables by which you want to group the data.
+
+[Syntax for `summarize`:]{.hi}
+
+```R
+summary_data = summarize(grouped_data, summary_var1 = function1(variable1), summary_var2 = function2(variable2), ...)
+```
+
+In this syntax, `grouped_data` is the grouped data frame, and `summary_var1`, `summary_var2`, ... are the new variables you're creating, which will contain the summary statistics for each group.
+
+### [Ex.]{.ex}
+
+[Using `group_by` and `summarize` together]{.hi}
+
+Suppose you want to find the average departure delay for each carrier in the `flights` dataset:
+
+**Step 1:** Group the data by the carrier.
+
+```R
+grouped_flights = group_by(flights, carrier)
+```
+
+**Step 2:** Summarize to find the average departure delay for each group.
+
+```R
+summary_flights = summarize(grouped_flights, avg_dep_delay = mean(dep_delay, na.rm = TRUE))
+```
+
+### Practice questions
+
+To deepen your understanding of `group_by` and `summarize`, try the following practice questions based on the `flights` dataset:
+
+1. Group the `flights` data by `month` and find the maximum departure delay for each month.
+  
+2. Group the `flights` data by `origin` (airport) and calculate the average air time for flights departing from each airport.
+  
+3. Group the `flights` data by both `carrier` and `month`. Find the minimum and maximum arrival delays for each group.
+
+These practice questions will help you understand how to use `group_by` and `summarize` for more complex data manipulations and analyses.
+
+## `arrange`
+
+### Basic Information
+
+The `arrange` function in `dplyr` is used for sorting a data frame by one or multiple variables. This is particularly useful when you want to view your data in a specific order, which can also aid in data analysis and visualization.
+
+[Syntax:]{.hi}
+
+```R
+sorted_data = arrange(data, variable1, desc(variable2), ...)
+```
+
+Here, `data` is the data frame you're working with, and `variable1, variable2, ...` are the variables by which you want to sort the data. Use `desc()` if you want to sort a variable in descending order.
+
+### [Ex.]{.ex}
+
+To demonstrate, let's again use the `flights` dataset. Suppose you want to sort the dataset by `month` and `day`.
+
+**Step 1:** Use `arrange` to sort the data.
+
+```R
+sorted_flights = arrange(flights, month, day)
+```
+
+You can also sort by multiple variables, and in mixed ascending and descending order. For example, to sort by `month` in ascending order and `dep_delay` in descending order:
+
+```R
+sorted_flights = arrange(flights, month, desc(dep_delay))
+```
+
+### Practice questions
+
+To get hands-on experience with `arrange`, try these practice questions based on the `flights` dataset:
+
+1. Sort the `flights` dataset by `carrier` and `flight` number. What are the first 5 rows?
+
+2. Sort the `flights` dataset by total flight time (`air_time + taxi_in + taxi_out`). What are the 5 shortest flights?
+
+3. Sort the `flights` dataset first by `origin` airport and then by the average arrival delay, in ascending order for both variables. You'll need to use both `group_by` and `summarize` before using `arrange`.
+
+These practice questions should help you get a feel for how to use `arrange` to sort your data for different kinds of analyses.
+
+# The pipe operator
+
+## Basic information
+
+The pipe operator `%>%`, pronounced as "then," is a powerful tool for chaining together multiple operations in a sequence. It is not part of base R but is made available through the `magrittr` package, which is automatically loaded when you load `dplyr`. The primary benefit of using the pipe operator is that it improves the readability of your code and helps you write more intuitive and maintainable scripts.
+
+### How it works
+
+The pipe operator takes the output of one function and uses it as the first argument of the next function. It eliminates the need to save intermediate variables when you perform multiple operations on a dataset.
+
+[Syntax:]{.hi}
+
+```R
+data %>% function1() %>% function2() %>% function3()
+```
+
+Here, `function1()` is applied to `data`, and the result is then passed as an argument to `function2()`, and so on.
+
+This code is equivalently written as 
+
+```R
+function3(function2(function1(data)))
+```
+
+### [Ex.]{.ex}
+
+Let's say you want to filter the `flights` dataset to include only flights that were delayed by more than 30 minutes and then arrange them by `dep_time`. Using the pipe operator, the code will look like this:
+
+```R
+flights %>% 
+  filter(dep_delay > 30) %>% 
+  arrange(dep_time)
+```
+
+This sequence reads naturally: "Take the `flights` data, then filter for flights delayed by more than 30 minutes, then arrange by departure time."
+
+### The compound assignment pipe `%<>%`
+
+#### Basic information
+
+The compound assignment pipe `%<>%`, also from the `magrittr` package, allows you to perform an operation on a variable and update the variable with the result, all in a single step. It's particularly useful for modifying a dataset in-place without the need to create a new one.
+
+[Syntax:]{.hi}
+
+```R
+data %<>% function()
+```
+
+Here, `function()` is applied to `data`, and the result replaces the original `data`.
+
+#### [Ex]{.ex}
+
+Suppose you have a data frame called `subset_flights` containing a subset of the `flights` data, and you want to filter it to include only those flights that had a departure delay greater than 30 minutes. Instead of creating a new variable to store the filtered data, you can use `%<>%` to update `subset_flights` in-place.
+
+```R
+# Create a subset
+subset_flights = select(flights, year:day, dep_time, arr_time)
+
+# Filter in-place
+subset_flights %<>% filter(dep_delay > 30)
+```
+
+In this example, `subset_flights` is updated to include only rows where the departure delay is greater than 30 minutes, without having to reassign the result to `subset_flights` explicitly.
+
+#### Summary
+
+Using the pipe operator `%>%` can make your code cleaner and easier to read, particularly when you're performing several operations in a sequence. It's an essential tool for data manipulation and transformation in R, especially when using the tidyverse set of packages, including `dplyr`.
+
+The compound assignment pipe `%<>%` is a convenient way to modify a variable in-place, saving you from having to create new variables for each step of your data manipulation. This can be particularly helpful for minimizing memory usage and simplifying code.
+
+## Advanced practice
+
+1. Which month had the highest average departure delay? Exclude any records with missing or `NA` values for departure delay.
+    - Hint: Use `filter`, `group_by`, `summarize`, and `arrange`.
+
+2. For each airport of origin (`origin`), find the average air time. Return only the airport and the average air time.
+    - Hint: Use `group_by`, `summarize`, and `select`.
+
+3. Which carrier has the most flights for each month? 
+    - Hint: Use `group_by`, `summarize`, and `arrange`.
+
+4. For each day of the week (`day`), find the number of flights and the average departure delay. Exclude records with `NA` or missing values for departure delay.
+    - Hint: Use `filter`, `group_by`, and `summarize`.
+
+5. For the month of January, find the five days with the highest average arrival delay. 
+    - Hint: Use `filter`, `group_by`, `summarize`, and `arrange`.
+
+## Appendix
+
+#### Flights codebook table
+<a id="flights-table"></a>
+
+
+| Variable         | Description                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| `year`           | Year the flight took place (2013 for all entries).                    |
+| `month`          | Month the flight took place (1-12).                                  |
+| `day`            | Day of the month the flight took place (1-31).                       |
+| `dep_time`       | Actual departure time (in 24-hour format, HHMM).                     |
+| `sched_dep_time` | Scheduled departure time (in 24-hour format, HHMM).                  |
+| `dep_delay`      | Departure delay in minutes. Negative values indicate early departures.|
+| `arr_time`       | Actual arrival time (in 24-hour format, HHMM).                       |
+| `sched_arr_time` | Scheduled arrival time (in 24-hour format, HHMM).                    |
+| `arr_delay`      | Arrival delay in minutes. Negative values indicate early arrivals.    |
+| `carrier`        | Two-letter airline carrier code.                                     |
+| `flight`         | Flight number.                                                       |
+| `tailnum`        | Tail number (aircraft identifier).                                   |
+| `origin`         | Three-letter code for the origin airport.                            |
+| `dest`           | Three-letter code for the destination airport.                       |
+| `air_time`       | Time spent in the air, in minutes.                                   |
+| `distance`       | Distance flown, in miles.                                            |
+| `hour`           | Scheduled departure hour.                                            |
+| `minute`         | Scheduled departure minute.                                          |
+| `time_hour`      | Complete scheduled departure time, in yyyy-mm-dd HH:MM:SS format.     |
+
+[Return to flights section](#flights)

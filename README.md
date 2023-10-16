@@ -17,7 +17,8 @@ Lab 01: R Markdown and linear models
 - [R Markdown example](https://ajdickinson.github.io/EC421F23_lab/labs/lab01/ex.Rmd)
 - [What to do when your R Markdown file does not knit](https://ajdickinson.github.io/EC421F23_lab/resources/RMD-trouble.html)
 
-Lab 02: The `tidyverse`
+Lab 02: Introduction to the `tidyverse`
+- [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab02/lab02.html)
 
 Lab 03: `ggplot2` + heteroskedasticity
 
