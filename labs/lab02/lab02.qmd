@@ -496,6 +496,60 @@ The compound assignment pipe `%<>%` is a convenient way to modify a variable in-
 
 # Appendix
 
+## Off-topic: Using transformations in `lm`
+
+Although this section veers away from our focus on `dplyr`, it's worth discussing how to incorporate transformations and interactions into linear models using functions like `log` or `I()` when using `lm` in R.
+
+### Using log transformations
+
+Log transformations can be useful for dealing with skewed data or exponential trends. To include a log transformation of a variable in a linear model, you can use the `log` function directly within the `lm` formula:
+
+```R
+model = lm(log(y) ~ x, data = your_data)
+```
+
+This will take the natural log of `y` in the model.
+
+### Using `I()` for polynomial terms and interactions
+
+The `I()` function is used to indicate that a specific term in the model formula should be interpreted "as is." This is especially useful for polynomial terms or interactions.
+
+#### Polynomial terms
+
+For example, to include a squared term of `x`:
+
+```R
+model = lm(y ~ x + I(x^2), data = your_data)
+```
+
+#### Interactions
+
+While interactions between two variables (e.g., `x:z`) can be specified directly in the formula, using `I()` allows for more complex interactions:
+
+```R
+model = lm(y ~ x * z + I(x * z^2), data = your_data)
+```
+
+### [Ex.]{.ex}
+
+[Log transformation]{.hi}
+
+Suppose we have a dataset `df` with variables `income` and `age` and we want to predict `income` using the log of `age`:
+
+```R
+model1 = lm(income ~ log(age), data = df)
+```
+
+[Polynomial term]{.hi}
+
+If we also suspect that `income` has a quadratic relationship with `age`:
+
+```R
+model2 = lm(income ~ age + I(age^2), data = df)
+```
+
+This section should provide a quick overview of how to use functions like `log` or `I()` in `lm` to handle a variety of transformations and interactions.
+
 ## Additional links and resources
 
 - [R for data science](https://r4ds.had.co.nz/transform.html)

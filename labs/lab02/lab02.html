@@ -3073,6 +3073,12 @@ vertical-align: -.125em;
   <li><a href="#advanced-practice" id="toc-advanced-practice" class="nav-link" data-scroll-target="#advanced-practice">Advanced practice</a></li>
   <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
   <ul class="collapse">
+  <li><a href="#off-topic-using-transformations-in-lm" id="toc-off-topic-using-transformations-in-lm" class="nav-link" data-scroll-target="#off-topic-using-transformations-in-lm">Off-topic: Using transformations in <code>lm</code></a>
+  <ul class="collapse">
+  <li><a href="#using-log-transformations" id="toc-using-log-transformations" class="nav-link" data-scroll-target="#using-log-transformations">Using log transformations</a></li>
+  <li><a href="#using-i-for-polynomial-terms-and-interactions" id="toc-using-i-for-polynomial-terms-and-interactions" class="nav-link" data-scroll-target="#using-i-for-polynomial-terms-and-interactions">Using <code>I()</code> for polynomial terms and interactions</a></li>
+  <li><a href="#ex.-6" id="toc-ex.-6" class="nav-link" data-scroll-target="#ex.-6"><span class="ex">Ex.</span></a></li>
+  </ul></li>
   <li><a href="#additional-links-and-resources" id="toc-additional-links-and-resources" class="nav-link" data-scroll-target="#additional-links-and-resources">Additional links and resources</a></li>
   <li><a href="#flights-codebook-table" id="toc-flights-codebook-table" class="nav-link" data-scroll-target="#flights-codebook-table">Flights codebook table</a></li>
   </ul></li>
@@ -3636,6 +3642,40 @@ $ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-
 </section>
 <section id="appendix" class="level1">
 <h1>Appendix</h1>
+<section id="off-topic-using-transformations-in-lm" class="level2">
+<h2 class="anchored" data-anchor-id="off-topic-using-transformations-in-lm">Off-topic: Using transformations in <code>lm</code></h2>
+<p>Although this section veers away from our focus on <code>dplyr</code>, it’s worth discussing how to incorporate transformations and interactions into linear models using functions like <code>log</code> or <code>I()</code> when using <code>lm</code> in R.</p>
+<section id="using-log-transformations" class="level3">
+<h3 class="anchored" data-anchor-id="using-log-transformations">Using log transformations</h3>
+<p>Log transformations can be useful for dealing with skewed data or exponential trends. To include a log transformation of a variable in a linear model, you can use the <code>log</code> function directly within the <code>lm</code> formula:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(<span class="fu">log</span>(y) <span class="sc">~</span> x, <span class="at">data =</span> your_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will take the natural log of <code>y</code> in the model.</p>
+</section>
+<section id="using-i-for-polynomial-terms-and-interactions" class="level3">
+<h3 class="anchored" data-anchor-id="using-i-for-polynomial-terms-and-interactions">Using <code>I()</code> for polynomial terms and interactions</h3>
+<p>The <code>I()</code> function is used to indicate that a specific term in the model formula should be interpreted “as is.” This is especially useful for polynomial terms or interactions.</p>
+<section id="polynomial-terms" class="level4">
+<h4 class="anchored" data-anchor-id="polynomial-terms">Polynomial terms</h4>
+<p>For example, to include a squared term of <code>x</code>:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> your_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="interactions" class="level4">
+<h4 class="anchored" data-anchor-id="interactions">Interactions</h4>
+<p>While interactions between two variables (e.g., <code>x:z</code>) can be specified directly in the formula, using <code>I()</code> allows for more complex interactions:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">*</span> z <span class="sc">+</span> <span class="fu">I</span>(x <span class="sc">*</span> z<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> your_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="ex.-6" class="level3">
+<h3 class="anchored" data-anchor-id="ex.-6"><span class="ex">Ex.</span></h3>
+<p><span class="hi">Log transformation</span></p>
+<p>Suppose we have a dataset <code>df</code> with variables <code>income</code> and <code>age</code> and we want to predict <code>income</code> using the log of <code>age</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>model1 <span class="ot">=</span> <span class="fu">lm</span>(income <span class="sc">~</span> <span class="fu">log</span>(age), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><span class="hi">Polynomial term</span></p>
+<p>If we also suspect that <code>income</code> has a quadratic relationship with <code>age</code>:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>model2 <span class="ot">=</span> <span class="fu">lm</span>(income <span class="sc">~</span> age <span class="sc">+</span> <span class="fu">I</span>(age<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This section should provide a quick overview of how to use functions like <code>log</code> or <code>I()</code> in <code>lm</code> to handle a variety of transformations and interactions.</p>
+</section>
+</section>
 <section id="additional-links-and-resources" class="level2">
 <h2 class="anchored" data-anchor-id="additional-links-and-resources">Additional links and resources</h2>
 <ul>
