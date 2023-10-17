@@ -7,7 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-pacman::p_load(tidyverse, broom)
+pacman::p_load(tidyverse, broom, ggplot2)
 ```
 
 # [Ex:]{.ex} Homework question
@@ -51,21 +51,57 @@ tbl = tibble(years_of_education, income)
 
 - Create a scatter plot with `years_of_education` on the x-axis and `income` on the y-axis. What does the relationship between the two variables look like?
 
+```{r question01, fig.width=8}
+plot(tbl, xlab = "Years of Education", ylab = "Income", main = "Income vs. Years of Education")
+```
+
 [Q2.]{.question} **Simple Linear Regression:**
 
 - Write the proper formula that describes the standard wage regression.
+
+$$
+\text{Income}_i = \alpha + \beta \; \text{Years of Education}_i = \varepsilon_i
+$$
+
 - Using the `lm` function, run a regression of `income` on `years_of_education`. Assign your linear model to a variable called `model`.  
+
+```{r}
+model = lm(formula = income ~ years_of_education, data = tbl)
+```
 
 [Q3.]{.question} **Model Summary:**
 
 - Extract and interpret the coefficients of the regression using the `broom` package's function `tidy()`.  
+
+```{r}
+tidy(model)
+```
+
+
 - What does the coefficient of `years_of_education` tell you about the relationship between education and income?
+
+According to the previous regression coefficients, an additional year of education is associated with \$1865 increase in income.
+
 - Are the coefficients statistically significant at the 5% level? Provide evidence for your answer.
+
+Yes. Observing the p-value, it is much smaller than 0.05, thus the coefficient is statistically significant.
 
 [Q4.]{.question} **Residuals:**
 
 - Suppose we are worried about heteroskedasticity. What is a simple, not so scientific way to check for heteroskedastic errors?
+
+Plot them.
+
 - Plot the residuals and discuss
+
+
+```{r}
+model_resid = resid(model)
+
+plot(tbl$years_of_education, model_resid)
+```
+
+As you can see in the plot above, the residuals of the model seem to increase in variation as `years_of_income` increases, which indicates a presence of heteroskedasticiy in the model.
 
 [Q5.]{.question} **Predictions:**
 

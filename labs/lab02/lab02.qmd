@@ -296,7 +296,7 @@ long_delayed_flights = select(long_delayed_flights, dep_delay)
 long_delayed_flights
 ```
 
-## Practice questions
+### Practice questions
 
 To reinforce your understanding, try solving these practice questions based on the `flights` dataset:
 
@@ -407,6 +407,8 @@ These practice questions should help you get a feel for how to use `arrange` to 
 
 # The pipe operator
 
+![](images/nesting-dolls.jpeg)
+
 ## Basic information
 
 The pipe operator `%>%`, pronounced as "then," is a powerful tool for chaining together multiple operations in a sequence. It is not part of base R but is made available through the `magrittr` package, which is automatically loaded when you load `dplyr`. The primary benefit of using the pipe operator is that it improves the readability of your code and helps you write more intuitive and maintainable scripts.
@@ -475,7 +477,7 @@ Using the pipe operator `%>%` can make your code cleaner and easier to read, par
 
 The compound assignment pipe `%<>%` is a convenient way to modify a variable in-place, saving you from having to create new variables for each step of your data manipulation. This can be particularly helpful for minimizing memory usage and simplifying code.
 
-## Advanced practice
+# Advanced practice
 
 1. Which month had the highest average departure delay? Exclude any records with missing or `NA` values for departure delay.
     - Hint: Use `filter`, `group_by`, `summarize`, and `arrange`.
@@ -492,9 +494,15 @@ The compound assignment pipe `%<>%` is a convenient way to modify a variable in-
 5. For the month of January, find the five days with the highest average arrival delay. 
     - Hint: Use `filter`, `group_by`, `summarize`, and `arrange`.
 
-## Appendix
+# Appendix
 
-#### Flights codebook table
+## Additional links and resources
+
+- [R for data science](https://r4ds.had.co.nz/transform.html)
+- [dplyr vignette](https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html)
+- [A reaaaally good set of slides written by Grant McDermott](https://raw.githack.com/uo-ec607/lectures/master/05-tidyverse/05-tidyverse.html#46)
+
+## Flights codebook table
 <a id="flights-table"></a>
 
 
