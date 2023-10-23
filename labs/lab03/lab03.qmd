@@ -1,0 +1,237 @@
+---
+title: "Lab 03: Heteroskedasticity"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - ../doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include ../_macros.tex >}}
+$$
+
+```{r}
+pacman::p_load(tidyverse, hrbrthemes, nord)
+```
+:::
+
+In this lab, we will delve into the concept of heteroskedasticity, an important phenomenon in regression analysis. Heteroskedasticity refers to the circumstance where the variability of a variable is unequal across the range of values of another variable to which it is related. This is often a violation of the Gauss-Markov assumptions underlying the classical linear regression model.
+
+We will explore how to identify and test for heteroskedasticity using R, particularly focusing on the Goldfeld-Quandt test and White's test. Additionally, we will look into the use of `ggplot2` for visualizing residuals, which can be a great way to check for heteroskedasticity.
+
+## Prerequisites
+
+Load the necessary libraries and set the theme for plots.
+
+```{r}
+library(pacman)
+p_load(tidyverse, fixest)
+theme_set(hrbrthemes::theme_ipsum())
+```
+
+## Generating Simulated Data
+
+First, let's create some simulated data to work with.
+
+```{r}
+set.seed(12345)
+n=1000
+data = tibble(
+  x=rnorm(n, 2, 1),
+  group=c(rep(0,n/2), rep(1,n/2)),
+  error = rnorm(n, 0, 1),
+  y_homo =  error,
+  y_hetero1= error*x,
+  y_hetero2= error*abs(x-2),
+  y_hetero3= error*(group+1)*3,  
+) 
+# Optional: Save the data to a CSV file
+#write_csv(data, file="Data_Heteroskedasticity.csv")
+```
+
+## Visualizing data
+
+### `ggplot2`: Philosophy and Layering
+
+`ggplot2` is built upon the principles outlined in "The Grammar of Graphics" by Leland Wilkinson. This grammar provides a powerful structure for systematically building up graphics step by step. The core philosophy behind `ggplot2` is to visualize data as a combination of layered elements. Each layer can represent data points, statistical summaries, or even annotations. By stacking layers on top of each other, users can create complex visualizations in a structured and incremental manner.
+
+#### Layers in ggplot2
+
+The layering principle is crucial to understanding how `ggplot2` operates. Each layer in a `ggplot2` graphic is composed of several distinct components:
+
+1. **Data**: The dataset to be visualized.
+2. **Aesthetic Mappings**: Descriptions of how variables in the data are mapped to aesthetic properties of the layer such as position, size, color, shape, etc.
+3. **Geometric Object (Geom)**: The geometric representation of the data like points (`geom_point()`), lines (`geom_line()`), or bars (`geom_bar()`).
+4. **Statistical Transformation (Stat)**: The statistical summary, if any, that needs to be performed on the data like binning, smoothing, etc.
+5. **Position Adjustment**: Adjustments to position of geoms, like stacking bars on top of each other.
+
+You initiate a plot using the `ggplot()` function, specifying the data and the aesthetic mappings. This creates a coordinate system that you can add layers to.
+
+```{r}
+#| echo: true
+# Initiate a plot
+p = ggplot(data, aes(x = x, y = y_homo))
+```
+
+Next, add layers to this plot using `+` operator. For example, to create a scatter plot, add a point geom:
+
+```{r}
+#| echo: true
+# Add a layer of points
+p + geom_point()
+```
+
+You can continue adding layers, like a smooth line or text annotations, each with its own aesthetics, geoms, and stats.
+
+```{r}
+# Add a layer of smooth line and text annotation
+p + geom_point() +
+  geom_smooth(method = "lm") +
+  annotate("text", x = 2, y = 3, label = "Annotation")
+```
+
+Each layer is independent and can operate on different data, have its own aesthetic mappings, and even have its own coordinate system. This layering system allows for a high degree of customization and complexity while maintaining a structured approach to plotting. This layered approach also makes it easy to modify or update plots, as you can adjust individual layers without affecting the rest of the plot.
+
+The `ggplot2` system's consistency and structure make it a powerful tool for creating a wide range of static graphics efficiently and intuitively. Through the exploration of layers and aesthetic mappings, users can create complex visualizations that effectively communicate data-driven insights.
+
+
+
+### Visualizing the generated data
+
+Visualization is a crucial step in understanding the data and the relationships among variables. Let's visualize the relationships between $x$ and different simulated dependent variables using `ggplot2`.
+
+::: {.panel-tabset}
+## `y_homo`
+
+```{r}
+ggplot(data=data, aes(x=x, y=y_homo)) +
+  geom_point()
+```
+
+## `y_hetero1`
+
+```{r}
+ggplot(data=data, aes(x=x, y=y_hetero1)) +
+  geom_point()
+```
+
+## `y_hetero2`
+
+```{r}
+ggplot(data=data, aes(x=x, y=y_hetero2)) +
+  geom_point()
+```
+
+## `y_hetero3`
+
+```{r}
+ggplot(data=data, aes(x=x, y=y_hetero3, color=factor(group))) +
+  geom_point(alpha=0.9) +
+  scale_color_manual(values = c(
+    nord::nord_palettes$frost[1],
+    nord::nord_palettes$frost[4])
+    ) +
+  labs(
+    color = "Group"
+  )
+  theme(
+    legend.position = "bottom"
+  )
+```
+:::
+
+# Goldfeld-Quandt Test
+
+The Goldfeld-Quandt (GQ) test is a classical statistical procedure used to check for heteroskedasticity in a regression model. Heteroskedasticity, a violation of one of the Gauss-Markov assumptions, occurs when the variance of the error terms is not constant across observations. This test is particularly useful when the variances are believed to change at a particular point of a covariate or across groups. The [GQ test]{.hi} splits the data into different segments, performs separate regression analyses on these segments, and tests whether the variances of the residuals from these regressions are significantly different.
+
+## Goldfeld-Quandt Test in R
+
+1. **Sort the Data**:
+    - Arrange the data in ascending order based on the independent variable suspected to exhibit heteroskedasticity.
+    
+```r
+data = data %>%
+  arrange(x)
+```
+
+2. **Split the Data**:
+    - Divide the data into two or more segments. A common approach is to split it into thirds and discard the middle third.
+    
+```r
+first_third = nrow(data)/3
+third_third = floor((nrow(data)/3) * 2) + 2
+data_1 = data[1:first_third, ]
+data_2 = data[third_third:n, ]
+```
+
+3. **Run Separate Regressions**:
+    - Perform regression analyses on these segments separately.
+    
+```r
+fit1 = lm(y_hetero2 ~ x, data_1 )  %>% summary()
+fit2 = lm(y_hetero2 ~ x, data_2 )  %>% summary()
+```
+
+4. **Compute Residual Sum of Squares (RSS)**:
+    - Calculate the sum of squared residuals for each regression.
+    
+```r
+rss1 = sum(resid(fit1)^2)
+rss2 = sum(resid(fit2)^2)
+```
+
+5. **Conduct Hypothesis Testing**:
+    - Compare the variances of the residuals from these regressions using an F-test.
+    - The null hypothesis ($H_0$) is that the variances are equal (Homoskedasticity), against the alternative hypothesis ($H_1$) that they are not equal (Heteroskedasticity).
+    
+```r
+tstat = rss2/rss1
+pf(q = tstat, df1 = 333-1, df2 = 333-1, lower.tail = F)
+```
+
+The [GQ test]{.hi} is a straightforward and intuitive method to test for heteroskedasticity, especially when there is a prior belief that the variance of errors may change at a particular point of a covariate.
+
+# White's Test
+
+White's Test is a statistical procedure that helps detect heteroskedasticity in a regression model. Unlike the Goldfeld-Quandt Test, White's Test does not require the data to be sorted, nor does it require the assumption that variances change at a particular point of a covariate. Instead, it's a general test for heteroskedasticity without specifying the form of heteroskedasticity.
+
+## White's Test in R
+
+1. **Run the Initial Regression**:
+    - Perform a regression analysis using the suspected model.
+    
+```r
+fit = lm(y_hetero2 ~ x, data)
+```
+
+2. **Compute Squared Residuals**:
+    - Obtain the residuals from the regression and square them.
+    
+```r
+data = data %>% mutate(resid = resid(fit)^2)
+```
+
+3. **Regress Squared Residuals on Original Independent Variable(s), Their Squares and Cross Products**:
+    - Perform a regression of the squared residuals on the original independent variable(s), their squares, and the cross products of the independent variables.
+    
+```r
+fit = lm(resid ~ x + I(x^2), data) %>% summary()
+```
+
+4. **Conduct Hypothesis Testing**:
+    - The test statistic is computed as $N \cdot R^2$ from the regression in step 3, where $N$ is the sample size and $R^2$ is the coefficient of determination from the regression.
+    - Under the null hypothesis of homoskedasticity, the test statistic follows a chi-square distribution with degrees of freedom equal to the number of regressors (excluding the constant term) in the regression in step 3.
+
+```r
+teststat = fit$r.squared * n
+pchisq(q = teststat, df = 2, lower.tail = F)
+```
+
+White's Test provides a non-specific approach to detect heteroskedasticity, making it a flexible option when the form of heteroskedasticity is unknown. It's a widely used test due to its generality and simplicity in implementation.

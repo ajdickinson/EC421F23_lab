@@ -22,6 +22,7 @@ Lab 02: Introduction to the `tidyverse`
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab02/lab02.html)
 
 Lab 03: `ggplot2` + heteroskedasticity
+- [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab03/lab03.html)
 
 Lab 04: MT review
 
