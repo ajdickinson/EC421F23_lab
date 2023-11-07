@@ -1,0 +1,253 @@
+---
+title: "Lab 05: Introduction to `ggplot2`"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - ../doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include ../_macros.tex >}}
+$$
+
+```{r}
+pacman::p_load(tidyverse, hrbrthemes, nord)
+```
+:::
+
+# Understanding `ggplot2`
+
+`ggplot2` is not merely an R package for creating aesthetic data graphics; it's a realization of a deep philosophy of visualization. The package implements the principles of the Grammar of Graphics, a concept introduced by Leland Wilkinson in his seminal 2005 book. This grammar goes beyond the traditional notions of graphics to provide a comprehensive language that describes and constructs a wide array of graphics tailored to an analysis.
+
+With `ggplot2`, creativity in data representation is not burdened by the tedium of graphic design details. Default settings within the package produce publication-ready plots, while also offering flexible theming capabilities for customized graphic needs. The emphasis is placed on revealing insights from data through visualization, rather than on the graphical details themselves.
+
+The design philosophy of `ggplot2` champions iterative refinement. Plots in `ggplot2` are built step by step, starting with the data representation and progressively adding statistical summaries and annotations. This mirrors the analytical thinking process, bridging the gap between the conceptual and the concrete, making `ggplot2` an invaluable educational tool.
+
+## What is The Grammar of Graphics?
+
+The concept behind the Grammar of Graphics and, by extension, `ggplot2`, is akin to learning a new language, with graphics composed of independent components such as data sets, geometric shapes, and aesthetic mappings. The package allows users to layer these components to create nuanced and complex visualizations. Learning `ggplot2` is about mastering this language rather than memorizing a myriad of plot types. Its consistent structure aims to minimize special cases and exceptions, making it an intuitive tool for users coming from different backgrounds and levels of experience.
+
+The Grammar of Graphics is a framework proposed by Leland Wilkinson for creating graphics in a structured manner. It allows breaking down the components of a graphic into logical elements, such as:
+
+- **Data:** The actual data that you want to plot.
+- **Aesthetics (aes):** The visual properties of the objects in your graph, like size, shape, and color.
+- **Geometries (geoms):** The geometric shapes that represent data points, like lines, bars, and points.
+
+`ggplot2` uses this framework to create consistent and understandable plots. The grammar allows you to succinctly summarize the components of a graphic with a simple syntax, facilitating the creation of complex and layered graphics with ease. 
+
+You can build every graph from the same few components. To these, you may add:
+
+- **Scales:** Transformations applied to your data.
+- **Statistical transformations (Stats):** Summarize data in many useful ways, like counting or averaging.
+- **Coordinate systems (Coords):** The plane in which your data lives, which could be Cartesian, polar, etc.
+- **Facets:** Ways to split your data into multiple plots based on a variable.
+- **Themes:** Control the finer points of display, like fonts, colors, and labels.
+
+`ggplot2` allows for the creation of complex plots from data in a piecemeal, understandable fashion. It's both a philosophy and a tool.
+
+
+## Components of ggplot2's Grammar of Graphics
+
+### Aesthetics
+Aesthetics are the visual properties that `ggplot2` uses to represent data points on a plot. These properties include axes, legends, and dimensions like color, shape, size, and transparency. Each aesthetic attribute can be mapped to variables in your data, providing cues that help the viewer distinguish between different data categories or values. Aesthetics are foundational to ggplot2's grammar; they define how data should be perceived on the plot. For example, the `aes()` function is used to specify that the x-position of points should represent one variable and the y-position another, while color or shape could represent a third variable.
+
+### Geometries
+Geometries, often abbreviated as "geoms," are the actual marks we put on a plot to represent data, such as points, lines, or bars. Each geom function in `ggplot2` takes a dataset and aesthetic mappings and renders a specific type of shape on the plot. Geoms are the building blocks of a plot and define its type – whether it is a scatterplot, bar chart, line graph, etc. The choice of geom is dependent on the nature of the data and the intended presentation. For example, `geom_point()` creates a scatterplot, while `geom_line()` connects data points with lines, and `geom_bar()` produces bar charts. The aesthetics provided determine how these shapes are styled and differentiated.
+
+### Scales
+Scales in `ggplot2` are the tools that map data values to aesthetic features such as color, size, and shape. They perform the critical role of translating quantitative and qualitative information into visual signals. Scales also construct the legends and the axes, allowing for the inverse mapping: readers can understand which data values correspond to specific points on the plot. Essentially, scales serve as an interpreter between the raw data and the aesthetic elements that make up the visual story of the plot.
+
+### Statistical transformations (Stats)
+Statistical transformations, commonly referred to as "stats," are the summary operations that `ggplot2` performs on data. These summaries include actions such as binning data to make histograms or applying regression models for trend lines. Stats help in representing abstract concepts and distributions directly on the plot, making them visible and easy to understand. They turn raw data into information that can be incorporated into the geometric elements—geoms—of a graph.
+
+### Coordinate systems (Coords)
+Coordinate systems, or "coords," define the space in which data is plotted. The Cartesian coordinate system is most common, but ggplot2 accommodates various others, including polar coordinates and different map projections. Beyond defining the plotting space, coordinate systems also dictate the appearance of axes and gridlines, aiding in the readability and interpretation of the graphic.
+
+### Facets
+Faceting is the method by which `ggplot2` creates multiple plots for different subsets of the dataset. Each subplot (or "facet") represents a slice of the data based on one or more categorical variables. This technique is also known as conditioning, latticing, or trellising and is powerful for comparing groups or trends across different levels of a variable(s).
+
+### Themes
+The theme of a `ggplot2` plot controls the non-data ink on a graphic. It is the aesthetic layer that governs the display properties like font type, size, and color, as well as plot background. While ggplot2 defaults are designed to produce visually pleasing results, fine-tuning through themes can enhance readability or meet the publication standards specific to different audiences and contexts.
+
+
+
+## ggplot2 Basics
+
+The main function in `ggplot2` is `ggplot()`, which you use to define the dataset and variables to map onto the aesthetics like x and y axes, color, size, etc.
+
+### Creating a Simple Plot
+
+Let's create a simple scatter plot using the `mpg` dataset which is included in `ggplot2`.
+
+```{r simple-plot}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+### Customizing Plots
+
+You can customize your plot in several ways. Let's change the points to blue and make them larger.
+
+```{r customize-plot}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue", size = 3)
+```
+
+### Building Plots Layer by Layer
+
+The power of ggplot2 lies in its ability to add layers to a plot. Let's add a smooth line to our scatter plot.
+
+```{r layering-plot}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy), method = "lm")
+```
+
+### Facets for Conditional Plots
+
+To explore the data further, you might create plots for subsets of the data. This is where facets come in handy.
+
+```{r facets-plot}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_wrap(~class, scales = "free_y")
+```
+
+### Themes
+
+The theme of a `ggplot2` plot controls the non-data ink on a graphic, influencing display properties such as font types, sizes, colors, and the plot background. While the defaults in ggplot2 are chosen to be aesthetically pleasant, you might need to adjust these settings for better communication or stylistic preferences, which is where custom theming comes into play.
+
+### Customizing with ggthemes
+
+For those who wish to apply different stylistic themes to their `ggplot2` plots, the `ggthemes` package offers a variety of options. The `ggthemes` package extends the capabilities of `ggplot2` by providing additional themes and scales that mimic the styles found in other software, among various publications, and even from the work of renowned experts in data visualization, like Edward Tufte.
+
+Here is how to install and use `ggthemes`:
+
+```{r theme-plot}
+# install.packages("ggthemes")
+library(ggthemes) # Load the ggthemes package
+
+# Create a ggplot and apply a theme from ggthemes
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  labs(
+    title = "The Economist theme"
+  ) +
+  theme_economist()
+```
+
+By using `ggthemes`, you can quickly give your plots a professional and polished look without the need for extensive customization. The package allows you to experiment with various established graphical styles and find the one that best suits the story your data is telling.
+
+### Aesthetic grouping 
+
+In `ggplot2`, grouping allows you to differentiate between subsets of data based on some categorical variables. With the `mtcars` dataset, we can group data based on variables such as the number of cylinders (`cyl`) or the transmission type (`am`).
+
+Let's create a line plot showing the relationship between the weight (`wt`) and miles per gallon (`mpg`), grouped by the number of cylinders (`cyl`).
+
+```{r}
+# Base plot
+ggplot(mtcars, aes(x = wt, y = mpg, group = factor(cyl), color = factor(cyl))) +
+  geom_line() +
+  geom_point() # Add points for clarity
+
+```
+
+Here, the `factor(cyl)` function is used to ensure that `cyl` is treated as a categorical variable. The `group` and `color` aesthetics are set to `factor(cyl)`, which instructs `ggplot2` to draw different lines for cars with different numbers of cylinders, each in a different color. Grouping in `ggplot2` provides a way to visually distinguish between different subsets of data, either by drawing different elements for each group or by using different colors or fills. By using the `mtcars` dataset, we can easily explore these concepts with real data.
+
+
+## Further Reading
+
+For those interested in learning more about `ggplot2`, the following resources are highly recommended:
+
+- ["ggplot2: Elegant Graphics for Data Analysis"](https://ggplot2-book.org/) by Hadley Wickham.
+- The [R for Data Science](https://r4ds.had.co.nz/data-visualisation.html) online chapters on data visualisation.
+- The extensive documentation and examples on the [ggplot2 website](https://ggplot2.tidyverse.org/reference/).
+
+
+
+# Two-Stage Least Squares (2SLS)
+
+Two-Stage Least Squares (2SLS) is an estimation technique used when dealing with endogenous regressors in a regression model. An endogenous regressor is one that is correlated with the error term in the model, which violates the ordinary least squares (OLS) assumption of exogeneity. This correlation can lead to biased and inconsistent OLS estimates.
+
+2SLS is a form of instrumental variable (IV) estimation where the potentially problematic endogenous variable is replaced by a variable that is correlated with the endogenous regressor but uncorrelated with the error term, called an instrument.
+
+### Steps in 2SLS
+
+1. **First Stage**: Regress the endogenous variable on the instrument(s) to obtain predicted values.
+2. **Second Stage**: Use these predicted values as an explanatory variable in the regression model instead of the actual endogenous variable.
+
+### Implementing 2SLS in R
+
+Below are the steps for conducting a 2SLS regression in R and visualizing the results with `ggplot2`.
+
+1. **First Stage**: Regress the endogenous variable `X` on the instrument `Z` and obtain the fitted values \(\hat{X}\).
+
+```r
+# Assuming 'data' is your dataframe with variables Y, X, and Z
+first_stage <- lm(X ~ Z, data = data)
+data$X_hat <- predict(first_stage, data)
+```
+
+2. **Second Stage**: Regress the outcome variable `Y` on the fitted values \(\hat{X}\) from the first stage.
+
+```r
+second_stage <- lm(Y ~ X_hat, data = data)
+summary(second_stage) # Output the summary of the regression
+```
+
+### [Ex.]{.ex} 2SLS. Card dataset
+
+The `Card` dataset provides an excellent opportunity to demonstrate the Two-Stage Least Squares (2SLS) method. This econometric technique is particularly useful when dealing with endogeneity in regression models. In the context of this dataset, we aim to estimate the causal effect of education (`educ`) on log wages (`lwage`), while acknowledging that education is potentially endogenous.
+
+The `Card` dataset originates from a study by economist David Card which investigates the return to education. It includes the following key variables:
+
+- `educ`: The individual's years of education.
+- `nearc4`: A binary indicator for proximity to a 4-year college.
+- `lwage`: The natural logarithm of the individual's wage.
+
+The dataset can be downloaded via the `woolridge` package:
+
+```{r}
+# Load package
+pacman::p_load("wooldridge")
+
+# Load the data
+data("card", package = "wooldridge")
+
+# Print first 6 rows
+card %>% select(educ, nearc4, lwage) %>% head()
+```
+
+### The 2SLS Estimation Procedure
+
+The 2SLS estimation can be described in two stages:
+
+[First Stage:]{.hi} Predicting the Endogenous Variable
+
+In the first stage, we regress the endogenous variable, `educ`, on the instrumental variable `nearc4` (and other exogenous covariates if necessary). The goal is to obtain the predicted values of `educ`, which are uncorrelated with the error term in the wage equation.
+
+```{r}
+# First Stage Regression
+first_stage <- lm(educ ~ nearc4, data = card)
+predicted_educ <- predict(first_stage)
+```
+
+[Second Stage:]{.hi} Regressing the Dependent Variable on the Predicted Values
+
+In the second stage, we use the predicted values of education obtained from the first stage to estimate its effect on log wages.
+
+```{r}
+# Second Stage Regression
+second_stage <- lm(lwage ~ predicted_educ, data = card)
+broom::tidy(second_stage)
+```
+
+The coefficient of `predicted_educ` in the second stage regression represents the estimated causal effect of education on log wages, controlling for potential endogeneity.
+
