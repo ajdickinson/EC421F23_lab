@@ -30,7 +30,7 @@ Lab 04: MT review
 Lab 05: `ggplot2` (part 2)
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab05/lab05.html)
 
-Lab 06: Time series in R
+Lab 06: Learning the Central Limit Theorem through simulation
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab06/lab06.html)
 
 

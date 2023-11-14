@@ -1,5 +1,5 @@
 ---
-title: "Lab 06: Sampling distribution and simulations"
+title: "Lab 06: Learning the Central Limit Theorem through simulation"
 subtitle: "Andrew Dickinson"
 self-contained: TRUE
 format:
@@ -432,65 +432,17 @@ grid_plot <- plot_grid(
 grid_plot
 ```
 
-<!-- Let's generate a random sample from a normal distribution with a mean of 0 and standard deviation of 1.
+## Conclusion
 
-```{r}
-set.seed(123)  # Ensuring reproducibility
-sample_size = 100
-random_sample = rnorm(sample_size, mean = 0, sd = 1)
-```
+The [CLT]{.hi} is a fundamental concept in econometrics, providing critical insight into the behavior of sample means and the normality of distributions. While its theoretical importance is undisputed, the application of simulations offers a complementary and practical approach to understanding these concepts. Simulations allow practitioners to visualize the convergence of sample means to normality as outlined by the CLT, especially with large sample sizes. This empirical approach not only reinforces the theoretical understanding but also provides intuitive insights into the stochastic nature of econometric models. By manipulating parameters and observing outcomes, econometricians can explore and validate theoretical assumptions, gaining a more nuanced appreciation of the underlying statistical phenomena.
 
-[Visualizing the Distribution]{.hi}
+Moreover, the combination of theory and simulation is invaluable in assessing the robustness of econometric models. Through simulated scenarios, the sensitivity and behavior of models under various conditions can be examined, which is particularly useful in policy analysis and forecasting. This dual approach not only deepens the understanding of econometric principles but also enhances the practitioner's ability to apply these principles in real-world situations. Ultimately, integrating theoretical knowledge with practical simulation exercises equips economists with a more comprehensive toolkit, bridging the gap between abstract concepts and empirical data analysis, and leading to more informed and reliable decision-making in the field.
 
-We can visualize this sample to understand its distribution.
+## Resources
 
-```{r}
-library(ggplot2)
+One of my favorite resources on the [CLT]{.hi} is from a YouTube series by 3blue1brown](https://www.youtube.com/@3blue1brown). If you would like a better understanding of the normal distribution, the [CLT]{.hi}, and how they related to convolutions and $\pi$, check out this series of videos:
 
-ggplot() + 
-  geom_histogram(aes(x = random_sample), binwidth = 0.25, fill = 'blue', alpha = 0.4, color = 'white') +
-  labs(title = "Histogram of Random Sample from Normal Distribution",
-       x = "Value",
-       y = "Frequency")
-```
-
-### Exploring Sampling Distributions
-
-#### Understanding the Difference Between Sample and Population
-In real-world scenarios, we often deal with samples rather than the entire population. A sampling distribution is the distribution of a statistic (like mean, median, etc.) based on all possible samples that can be drawn from a population.
-
-#### Simulating Sampling Distributions
-We will simulate the process of drawing samples from a population and calculate the mean for each sample.
-
-```{r}
-population = rnorm(10000, mean = 0, sd = 1)  # Simulating a population
-sample_means = replicate(1000, mean(sample(population, size = sample_size)))
-
-ggplot() + 
-  geom_histogram(aes(x = sample_means), bins = 30, fill = 'green', color = 'black') +
-  labs(title = "Histogram of Sample Means",
-       x = "Sample Mean",
-       y = "Frequency")
-```
-
-#### Conclusion
-This lab introduced the basics of simulations in R. We explored how to generate random samples and visualize them, and we briefly touched on the concept of sampling distributions.
-
----
-
-## Homework Question
-
-**Question:**  
-You are given a population that is normally distributed with a mean of $\mu = 50$ and a standard deviation of $\sigma = 10$. Your task is to understand how the sampling distribution of the mean behaves compared to the population distribution.
-
-1. Use R to generate a population of size 10,000 with the given parameters.
-2. Draw 1,000 random samples from this population, each of size 30. Calculate the mean of each sample.
-3. Plot the histogram of the sample means. Compare it with the population distribution in terms of shape, center, and spread.
-4. Based on your observations, explain how the Central Limit Theorem applies to the sampling distribution of the mean.
-5. Perform a simple hypothesis test: Test if the mean of the population is significantly different from 48. Use a significance level of 0.05.
-
-Provide your R code and a brief explanation for each step. Your answer should illustrate the relationship between population distributions, sampling distributions, and hypothesis testing.
-
----
-
-This draft and homework question should provide a good starting point for teaching these concepts in an introductory econometrics class. The R code is kept simple and uses basic functions, making it accessible to beginners. -->
+- [What is the the Central Limit Theorem?](https://www.youtube.com/watch?v=zeJD6dqJ5lo)
+- [A pretty reason why Gaussian + Gaussian = Gaussian](https://www.youtube.com/watch?v=d_qvLDhkg00)
+- [Why $pi$ is in the normal distribution](https://www.youtube.com/watch?v=cy8r7WSuT1I)
+- [What is a convolution](https://www.youtube.com/watch?v=KuXjwB4LzSA)
