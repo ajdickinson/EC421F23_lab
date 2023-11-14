@@ -58,11 +58,11 @@ data = tibble(
 
 ## Visualizing data
 
-### `ggplot2`: Philosophy and Layering
+### `ggplot2`
 
 `ggplot2` is built upon the principles outlined in "The Grammar of Graphics" by Leland Wilkinson. This grammar provides a powerful structure for systematically building up graphics step by step. The core philosophy behind `ggplot2` is to visualize data as a combination of layered elements. Each layer can represent data points, statistical summaries, or even annotations. By stacking layers on top of each other, users can create complex visualizations in a structured and incremental manner.
 
-#### Layers in ggplot2
+#### Layers in `ggplot2`
 
 The layering principle is crucial to understanding how `ggplot2` operates. Each layer in a `ggplot2` graphic is composed of several distinct components:
 
@@ -101,7 +101,10 @@ Each layer is independent and can operate on different data, have its own aesthe
 
 The `ggplot2` system's consistency and structure make it a powerful tool for creating a wide range of static graphics efficiently and intuitively. Through the exploration of layers and aesthetic mappings, users can create complex visualizations that effectively communicate data-driven insights.
 
-
+#### Resources
+- [ggplot2 page](https://ggplot2.tidyverse.org/)
+- [ggplot2 book](https://ggplot2-book.org/)
+- [R graph gallery](https://r-graph-gallery.com/ggplot2-package.html)
 
 ### Visualizing the generated data
 
@@ -235,3 +238,4 @@ pchisq(q = teststat, df = 2, lower.tail = F)
 ```
 
 White's Test provides a non-specific approach to detect heteroskedasticity, making it a flexible option when the form of heteroskedasticity is unknown. It's a widely used test due to its generality and simplicity in implementation.
+

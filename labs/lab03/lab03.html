@@ -3137,7 +3137,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   <li><a href="#generating-simulated-data" id="toc-generating-simulated-data" class="nav-link" data-scroll-target="#generating-simulated-data">Generating Simulated Data</a></li>
   <li><a href="#visualizing-data" id="toc-visualizing-data" class="nav-link" data-scroll-target="#visualizing-data">Visualizing data</a>
   <ul class="collapse">
-  <li><a href="#ggplot2-philosophy-and-layering" id="toc-ggplot2-philosophy-and-layering" class="nav-link" data-scroll-target="#ggplot2-philosophy-and-layering"><code>ggplot2</code>: Philosophy and Layering</a></li>
+  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link" data-scroll-target="#ggplot2"><code>ggplot2</code></a></li>
   <li><a href="#visualizing-the-generated-data" id="toc-visualizing-the-generated-data" class="nav-link" data-scroll-target="#visualizing-the-generated-data">Visualizing the generated data</a></li>
   </ul></li>
   <li><a href="#goldfeld-quandt-test" id="toc-goldfeld-quandt-test" class="nav-link" data-scroll-target="#goldfeld-quandt-test">Goldfeld-Quandt Test</a>
@@ -3203,11 +3203,11 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 </section>
 <section id="visualizing-data" class="level2">
 <h2 class="anchored" data-anchor-id="visualizing-data">Visualizing data</h2>
-<section id="ggplot2-philosophy-and-layering" class="level3">
-<h3 class="anchored" data-anchor-id="ggplot2-philosophy-and-layering"><code>ggplot2</code>: Philosophy and Layering</h3>
+<section id="ggplot2" class="level3">
+<h3 class="anchored" data-anchor-id="ggplot2"><code>ggplot2</code></h3>
 <p><code>ggplot2</code> is built upon the principles outlined in “The Grammar of Graphics” by Leland Wilkinson. This grammar provides a powerful structure for systematically building up graphics step by step. The core philosophy behind <code>ggplot2</code> is to visualize data as a combination of layered elements. Each layer can represent data points, statistical summaries, or even annotations. By stacking layers on top of each other, users can create complex visualizations in a structured and incremental manner.</p>
 <section id="layers-in-ggplot2" class="level4">
-<h4 class="anchored" data-anchor-id="layers-in-ggplot2">Layers in ggplot2</h4>
+<h4 class="anchored" data-anchor-id="layers-in-ggplot2">Layers in <code>ggplot2</code></h4>
 <p>The layering principle is crucial to understanding how <code>ggplot2</code> operates. Each layer in a <code>ggplot2</code> graphic is composed of several distinct components:</p>
 <ol type="1">
 <li><strong>Data</strong>: The dataset to be visualized.</li>
@@ -3244,6 +3244,14 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 </div>
 <p>Each layer is independent and can operate on different data, have its own aesthetic mappings, and even have its own coordinate system. This layering system allows for a high degree of customization and complexity while maintaining a structured approach to plotting. This layered approach also makes it easy to modify or update plots, as you can adjust individual layers without affecting the rest of the plot.</p>
 <p>The <code>ggplot2</code> system’s consistency and structure make it a powerful tool for creating a wide range of static graphics efficiently and intuitively. Through the exploration of layers and aesthetic mappings, users can create complex visualizations that effectively communicate data-driven insights.</p>
+</section>
+<section id="resources" class="level4">
+<h4 class="anchored" data-anchor-id="resources">Resources</h4>
+<ul>
+<li><a href="https://ggplot2.tidyverse.org/">ggplot2 page</a></li>
+<li><a href="https://ggplot2-book.org/">ggplot2 book</a></li>
+<li><a href="https://r-graph-gallery.com/ggplot2-package.html">R graph gallery</a></li>
+</ul>
 </section>
 </section>
 <section id="visualizing-the-generated-data" class="level3">

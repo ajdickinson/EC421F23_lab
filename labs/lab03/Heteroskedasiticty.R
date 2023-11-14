@@ -1,6 +1,6 @@
 library(pacman)
 p_load(tidyverse, fixest)
-theme_set(theme_bw())
+theme_set(hrbrthemes::theme_ipsum())
 
 
 ### Heteroskedasticity
@@ -30,9 +30,18 @@ ggplot(data=data, aes(x=x, y=y_hetero3, color=factor(group))) + geom_point(alpha
 data = data %>%
   arrange(x)
 
-## Step 2. Split the sample (1/3)
-data_1 = data[1:333, ]
-data_2 = data[668:1000, ]
+## Step 2. Split the sample into thirds
+  # First third index
+  first_third = nrow(data)/3
+  # Third third index
+  third_third = floor((nrow(data)/3) * 2) + 2
+  # Number of rows
+  n = nrow(data)
+
+# Split data
+data_1 = data[1:first_third, ]
+data_2 = data[third_third:n, ]
+
 
 ### Step 3. Run regressions
 fit1 = lm(y_hetero2 ~ x, data_1 )  %>% summary()
