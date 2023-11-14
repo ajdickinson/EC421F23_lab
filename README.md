@@ -31,6 +31,8 @@ Lab 05: `ggplot2` (part 2)
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab05/lab05.html)
 
 Lab 06: Time series in R
+- [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab06/lab06.html)
+
 
 Lab 07: Simulation exercises
 

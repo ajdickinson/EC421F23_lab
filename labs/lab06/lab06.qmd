@@ -1,0 +1,496 @@
+---
+title: "Lab 06: Sampling distribution and simulations"
+subtitle: "Andrew Dickinson"
+self-contained: TRUE
+format:
+  html:
+    theme: 
+      - cosmo
+      - ../doc-styles.scss
+    toc: true
+    toc-depth: 3
+    html-math-method: mathjax
+---
+
+::: {.content-hidden}
+$$
+{{< include ../_macros.tex >}}
+$$
+
+```{r}
+pacman::p_load(tidyverse, hrbrthemes, nord)
+```
+:::
+
+# Prologue
+
+I would like to introduce the topic of sampling distributions from a set of slides that I covered in EC 320 last Spring: 
+
+
+[link](https://ajdickinson.github.io/EC320S23/slides/001-review/010-main.html#/9/17)
+
+
+# Introduction to Simulations in R
+
+
+## Simulation in econometrics
+Simulations are a powerful tool in econometrics, allowing us to model and analyze complex systems by generating and studying synthetic data. They help in understanding the behavior of estimators and test statistics under various scenarios, which is crucial in hypothesis testing and other inferential procedures.
+
+By using R's rich set of packages and functions for statistical computation, an economist can run multiple iterations of a model quickly and efficiently, each time tweaking the parameters slightly to see how sensitive the results are to changes in the underlying assumptions or external shocks.
+
+## `for` loops
+
+`for` loops are a fundamental construct in programming, allowing you to execute a block of code repeatedly, with the ability to modify the behavior of each iteration. This is particularly useful in data analysis and simulations, where you often need to perform repetitive tasks on different subsets of data or run simulations multiple times with varying parameters.
+
+## Basic Structure
+
+The basic syntax of a `for` loop in R is as follows:
+
+```r
+for (variable in sequence) {
+    # Code to execute on each iteration
+}
+```
+
+- **`variable`**: This is a placeholder that takes on the value of each element in the sequence, one at a time.
+- **`sequence`**: This is a vector or a list over which the loop iterates. It can be a numeric range, characters, or any iterable object in R.
+
+### Example Usage
+
+Here’s a simple example:
+
+```r
+# Loop over a vector of numbers
+for (i in 1:5) {
+    print(paste("Iteration number", i))
+}
+```
+
+This loop will print the iteration number five times, each time with the current value of `i`.
+
+
+
+## RNG through distribution functions
+
+[Distribution functions]{.hi} are fundamental to statistical analysis and simulations in R, offering a suite of tools to work with different probability distributions. R provides a comprehensive set of functions for working with distributions, including functions for density (`d`), distribution (`p`), quantile (`q`), and random generation (`r`). These functions are prefixed with a letter that denotes their purpose followed by the abbreviation of the distribution name. For example, `rnorm` is for random generation from the normal distribution.
+
+Here are some function notes of a few of the available RNG distribution function in base R
+
+#### Function notes: `rnorm`
+
+::: {.panel-tabset}
+
+##### [Description]{.hi}
+
+The `rnorm` function in R generates random numbers following a normal (Gaussian) distribution. It's widely used in statistics and data science for simulations, statistical modeling, and to represent random errors or natural variations in data. This function is a cornerstone for many statistical methods and experiments that assume a normal distribution.
+
+- [Function]{.hi}: `rnorm()`
+- [Package]{.hi}: Base R (no package required)
+
+##### [Syntax]{.hi}
+```R
+rnorm(n, mean = 0, sd = 1)
+```
+
+- `n`: The number of observations to generate.
+- `mean`: The mean of the normal distribution. Default is 0.
+- `sd`: The standard deviation of the normal distribution. Default is 1.
+
+##### [Ex.]{.ex}
+```{r}
+# Generating 10 random numbers from a normal distribution
+# with mean 0 and standard deviation 1
+random_numbers = rnorm(10, mean = 0, sd = 1)
+
+# Display the generated numbers
+random_numbers
+```
+
+:::
+
+
+#### Function notes: `runif`
+
+::: {.panel-tabset}
+
+##### [Description]{.hi}
+
+The `runif` function in R generates random numbers following a uniform distribution. It's commonly used in simulations where you need random numbers that are equally likely within a specified range. This function is essential in scenarios requiring random sampling from a uniform distribution, such as Monte Carlo simulations or random allocation in experimental designs.
+
+- [Function]{.hi}: `runif()`
+- [Package]{.hi}: Base R (no package required)
+
+##### [Syntax]{.hi}
+```R
+runif(n, min = 0, max = 1)
+```
+
+- `n`: The number of observations to generate.
+- `min`: The minimum value of the uniform distribution. Default is 0.
+- `max`: The maximum value of the uniform distribution. Default is 1.
+
+##### [Ex.]{.ex}
+```{r}
+# Generating 10 random numbers from a uniform distribution
+# in the range [0, 1]
+uniform_numbers = runif(10, min = 0, max = 1)
+
+# Display the generated numbers
+uniform_numbers
+```
+
+:::
+
+#### Function notes: `rbinom`
+
+::: {.panel-tabset}
+
+##### [Description]{.hi}
+
+The `rbinom` function in R generates random numbers from a binomial distribution, which describes the number of successes in a fixed number of independent Bernoulli trials. It's widely used in statistical modeling and simulations, particularly for scenarios like coin flipping, clinical trials, or any process that can be described in terms of success/failure outcomes.
+
+- [Function]{.hi}: `rbinom()`
+- [Package]{.hi}: Base R (no package required)
+
+##### [Syntax]{.hi}
+```R
+rbinom(n, size, prob)
+```
+
+- `n`: The number of random values to generate.
+- `size`: The number of trials (or the size of each trial).
+- `prob`: The probability of success on each trial.
+
+##### [Ex.]{.ex}
+```{r}
+# Generating 10 random numbers from a binomial distribution
+# with 5 trials and a success probability of 0.5 (like flipping a fair coin)
+binomial_numbers = rbinom(10, size = 5, prob = 0.5)
+
+# Display the generated numbers
+binomial_numbers
+```
+
+:::
+
+#### Function notes: `rpois`
+
+::: {.panel-tabset}
+
+##### [Description]{.hi}
+
+The `rpois` function in R generates random numbers from a Poisson distribution, which is often used to model the number of times an event occurs within a fixed interval of time or space. This function is particularly useful in fields like queuing theory, telecommunications, and epidemiology, where the focus is on counting occurrences of events.
+
+- [Function]{.hi}: `rpois()`
+- [Package]{.hi}: Base R (no package required)
+
+##### [Syntax]{.hi}
+```R
+rpois(n, lambda)
+```
+
+- `n`: The number of random values to generate.
+- `lambda`: The average number of events in the interval (the rate parameter).
+
+##### [Ex.]{.ex}
+```{r}
+# Generating 10 random numbers from a Poisson distribution
+# with a lambda (rate) of 3
+poisson_numbers = rpois(10, lambda = 3)
+
+# Display the generated numbers
+poisson_numbers
+```
+
+:::
+
+Apart from these, R also supports other distribution functions like `rcauchy` for the Cauchy distribution, `rt` for the t-distribution, `rf` for the F-distribution, among others. Each of these functions allows economists and statisticians to generate random data that can be used to model various stochastic processes or to perform empirical estimation procedures such as the bootstrap method.
+
+Using these random generation functions, one can simulate a wide array of economic and econometric scenarios. For instance, `rnorm` can be used to simulate the error terms in a linear regression model, or `rbinom` can simulate the number of successes in a series of Bernoulli trials, which could represent anything from product sales to policy interventions.
+
+These distribution functions are not only tools for executing statistical methods but also serve as a bridge between theoretical distributions and practical applications, allowing users to visualize and understand statistical concepts in a concrete way. By integrating these functions into econometric models, users gain a deeper appreciation for the underlying statistical mechanics of the methods they employ.
+
+## [Ex.]{.ex} The central limit theorem
+
+### Theoretical Background
+
+[Theorem]{.hi}
+
+> *Let* $x_1, x_2, \dots, x_n$ *be a random sample from a population with mean* $\mathop{\mathbb{E}}\left[ X \right] = \mu$ *and variance* $\text{Var}\left( X \right) = \sigma^2 < \infty$*, let* $\bar{X}$ *be the sample mean.*  *Then, as* $n\rightarrow \infty$*, the function* $\frac{\sqrt{n}\left(\bar{X}-\mu\right)}{S_x}$ *converges to a* [Normal Distribution]{.note} *with mean 0 and variance 1.* 
+
+
+The [Central Limit Theorem (CLT)]{.hi} is a fundamental principle in statistics that describes the behavior of the mean of a large number of independent, identically distributed (i.i.d.) random variables. The theorem states that as the sample size becomes larger, the distribution of the sample mean approaches a normal distribution, regardless of the shape of the population distribution.
+
+Mathematically, suppose we have a population with a mean $\mu$ and a finite variance $\sigma^2$. If we take a sample of size $n$ from this population, then the sample mean $\bar{X}$ will approximately follow a normal distribution with mean $\mu$ and standard deviation $\frac{\sigma}{\sqrt{n}}$ as $n$ becomes large. This can be expressed as:
+
+$$
+\bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right)
+$$
+
+This theorem is significant because it enables us to make inferences about population parameters using sample statistics, even when the population distribution is not normally distributed.
+
+### Simulating the Central Limit Theorem in R
+
+To demonstrate the Central Limit Theorem through simulation, we will follow these steps:
+
+1. [Choose a Non-Normal Distribution]{.hi}: We'll start with a population distribution that is clearly not normal (e.g., a uniform or exponential distribution) to illustrate the power of the CLT.
+
+2. [Draw Samples and Compute Means]{.hi}: We'll draw multiple samples of increasing size from this population and compute the mean of each sample.
+
+3. [Visualize the Distribution of Sample Means]{.hi}: By plotting the distribution of these sample means, we'll observe how it becomes more bell-shaped and normal as the sample size increases, illustrating the CLT.
+
+### [Ex.]{.ex}
+
+Let's reiterate the concept of the [CLT]{.hi} in R! First, let's create a (non-normal) population distribution in R
+
+```{r}
+#| label: pop_distribution
+#| echo: true
+
+# Generate a random seed
+set.seed(42)
+
+# Set population size
+population_size = 10000
+
+# Generating a population from a uniform distribution
+pop_tbl = tibble(
+  value = runif(population_size, min = 0, max = 10) + rnorm(population_size, 0, 5)
+)
+
+glimpse(pop_tbl)
+```
+
+So we've created a population sample--now let's create a sampling distribution. We can do this using the `sample_n` function from `dplyr`.
+
+---
+
+#### Function notes: `sample_n`
+
+::: {.panel-tabset}
+
+##### [Description]{.hi}
+
+The `sample_n` function in R is used to randomly select a specified number of rows from a data frame or a `tibble`. This function is particularly useful for creating random subsets of a dataset, which can be essential for tasks like creating training and testing sets in machine learning, performing bootstrapping, or conducting random sampling for statistical analysis.
+
+Here's a brief description of its usage and syntax:
+
+- [Function]{.hi}: `sample_n()`
+- [Package]{.hi}: `dplyr` (Tidyverse)
+
+##### [Syntax]{.hi}
+```R
+sample_n(tbl, size, replace = FALSE, weight = NULL, .env = NULL)
+```
+
+- `tbl`: The data frame or tibble to sample from.
+- `size`: The number of rows to sample. If this number is greater than the number of rows in the `tbl` and `replace` is `FALSE`, it throws an error. If `replace` is `TRUE`, it allows for sampling with replacement.
+- `replace`: Logical argument indicating whether the sampling should be with replacement. Default is `FALSE`.
+- `weight`: An optional vector of probabilities for selecting each row. It must be of the same length as the number of rows in the `tbl`.
+- `.env`: An environment in which to evaluate the weights.
+
+##### [Ex.]{.ex}
+```{r}
+library(dplyr)
+
+data = tibble(
+  value = rnorm(n = 10, mean = 0, sd = 1)
+)
+
+# To randomly select 5 rows from the data frame
+sampled_data = sample_n(data, 5)
+
+sampled_data
+```
+
+:::
+
+---
+
+Now let's create a sampling tibble, `sample_tbl`:
+
+```{r}
+#| echo: true
+#| label: sampling_object
+
+# Set sample size
+sample_size = 50
+
+# Randomly pick sample from population
+sample_tbl = pop_tbl %>% 
+  sample_n(., sample_size) 
+
+sample_tbl
+```
+
+Now to take the mean, we can simply use `summarize` on the `sample_tbl`.
+
+```{r}
+sample_tbl %>% summarize(mu_hat = mean(value))
+```
+
+Now let's apply this code to better understand how the [CLT]{.hi} works in practice by incorporating a `for` loop. To restate, the [CLT]{.hi} we have a population, that is not normal. Let's visualize two properties of the theorem:
+
+1. If we take sample of this distribution (_or any distribution_), and find the mean, repeated samples of this population with approach a normal distribution. 
+2. As the sample size is increases, the speed to which we approach the normal distribution increases
+
+Let's write a `for` loop that repeatedly takes samples from the population distribution, take the mean, and plot them.
+
+```{r}
+#| label: sim
+
+# Create an empty tibble
+sim_tbl = tibble(mu_hat = numeric(0))
+
+# Simulate the process 100 times
+for (i in 1:20) {
+  # Sampling and computing the mean
+  sample_mean = pop_tbl %>% 
+                 sample_n(size = sample_size) %>% 
+                 summarize(mu_hat = mean(value)) %>% 
+                 pull(mu_hat)
+  
+  # Adding the result to the tibble
+  sim_tbl = bind_rows(sim_tbl, tibble(mu_hat = sample_mean))
+}
+```
+
+Now let's plot the result
+
+```{r}
+ggplot(sim_tbl, aes(mu_hat)) +
+  geom_histogram(binwidth = 0.25, color = 'white', fill = nord::nord_palettes$frost[1])
+```
+
+The output looks fairly reasonable. However, to better visualize the two properties above, let's change the simulation to express the two properties more clearly.
+
+Now, lets vary the sampling distributions size and increase the number of times we run the sim
+
+```{r}
+#| label: real_sim
+#| echo: false
+#| cache: true
+#| message: false
+#| warning: false
+
+library(cowplot)
+
+
+sim_fun = function(pop_tbl, sample_size, iter) {
+  # Simulation
+  sim_tbl <- parallel::mclapply(mc.cores = 8, X = 1:iter, FUN = function(x, size = sample_size) {
+    pop_tbl %>% 
+      sample_n(size = sample_size) %>% 
+      summarize(mu_hat = mean(value))
+  }) %>% do.call(rbind, .) %>% as_tibble()
+  
+  p = ggplot(data = sim_tbl, aes(mu_hat)) +
+    geom_histogram(binwidth = 0.05, color = 'white', lwd = 0.2, fill = nord::nord_palettes$frost[1]) +
+    theme_minimal() +
+    labs(
+      caption = paste0("Sample means, iterations = ", iter, ", sample size = ", sample_size),
+      x = "Sample mean",
+      y = "Count"
+    ) +
+    coord_cartesian(xlim = c(2, 8))
+  }
+
+# Defining parameter ranges
+sample_sizes = c(5, 10, 25, 50, 100, 200, 1000)
+iter = c(100, 1000, 10000)
+
+# Applying the function and storing results in a nested list
+grid = lapply(X = iter, function(i) {
+  lapply(X = sample_sizes, function(s) {
+    sim_fun(sample_size = s, iter = i, pop_tbl = pop_tbl)
+  })
+})
+
+# Function to arrange plots for a specific iteration
+arrange_plots_for_iter <- function(plots_list, iter_index) {
+  plot_grid(plotlist = plots_list[[iter_index]], ncol = 1)
+}
+
+# Arrange the plots in a grid with each column having the same iteration
+grid_plot <- plot_grid(
+  arrange_plots_for_iter(grid, 1),
+  arrange_plots_for_iter(grid, 2),
+  arrange_plots_for_iter(grid, 3),
+  ncol = 3,
+  labels = c("Iter 10", "Iter 100", "Iter 1000")
+)
+
+```
+
+```{r} 
+#| echo: false
+#| fig.height: 16
+#| fig.width: 12
+
+
+# Display or save the final grid plot
+grid_plot
+```
+
+<!-- Let's generate a random sample from a normal distribution with a mean of 0 and standard deviation of 1.
+
+```{r}
+set.seed(123)  # Ensuring reproducibility
+sample_size = 100
+random_sample = rnorm(sample_size, mean = 0, sd = 1)
+```
+
+[Visualizing the Distribution]{.hi}
+
+We can visualize this sample to understand its distribution.
+
+```{r}
+library(ggplot2)
+
+ggplot() + 
+  geom_histogram(aes(x = random_sample), binwidth = 0.25, fill = 'blue', alpha = 0.4, color = 'white') +
+  labs(title = "Histogram of Random Sample from Normal Distribution",
+       x = "Value",
+       y = "Frequency")
+```
+
+### Exploring Sampling Distributions
+
+#### Understanding the Difference Between Sample and Population
+In real-world scenarios, we often deal with samples rather than the entire population. A sampling distribution is the distribution of a statistic (like mean, median, etc.) based on all possible samples that can be drawn from a population.
+
+#### Simulating Sampling Distributions
+We will simulate the process of drawing samples from a population and calculate the mean for each sample.
+
+```{r}
+population = rnorm(10000, mean = 0, sd = 1)  # Simulating a population
+sample_means = replicate(1000, mean(sample(population, size = sample_size)))
+
+ggplot() + 
+  geom_histogram(aes(x = sample_means), bins = 30, fill = 'green', color = 'black') +
+  labs(title = "Histogram of Sample Means",
+       x = "Sample Mean",
+       y = "Frequency")
+```
+
+#### Conclusion
+This lab introduced the basics of simulations in R. We explored how to generate random samples and visualize them, and we briefly touched on the concept of sampling distributions.
+
+---
+
+## Homework Question
+
+**Question:**  
+You are given a population that is normally distributed with a mean of $\mu = 50$ and a standard deviation of $\sigma = 10$. Your task is to understand how the sampling distribution of the mean behaves compared to the population distribution.
+
+1. Use R to generate a population of size 10,000 with the given parameters.
+2. Draw 1,000 random samples from this population, each of size 30. Calculate the mean of each sample.
+3. Plot the histogram of the sample means. Compare it with the population distribution in terms of shape, center, and spread.
+4. Based on your observations, explain how the Central Limit Theorem applies to the sampling distribution of the mean.
+5. Perform a simple hypothesis test: Test if the mean of the population is significantly different from 48. Use a significance level of 0.05.
+
+Provide your R code and a brief explanation for each step. Your answer should illustrate the relationship between population distributions, sampling distributions, and hypothesis testing.
+
+---
+
+This draft and homework question should provide a good starting point for teaching these concepts in an introductory econometrics class. The R code is kept simple and uses basic functions, making it accessible to beginners. -->

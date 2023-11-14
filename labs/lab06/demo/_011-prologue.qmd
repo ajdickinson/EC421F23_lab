@@ -1,0 +1,55 @@
+---
+name: prologue
+---
+
+## Housekeeping
+
+The first lab assignment is due Friday at 5p
+
+. . .
+
+[Due dates]{.hi}
+
+- Problem sets: Tuesday nights at 11:59p
+- Lab assignments: Fridays at 5p  
+
+. . . 
+
+The first analytical problem set is due Tuesday. [I will post it later tonight.]{.fragment} [Very short. Very simple]{.fragment}
+
+. . .
+
+Any issues with [R]{.mono}?
+
+- I have office hours Tomorrow from 4p-5p, 
+- Colleen has office hours Friday, 8a-9a
+
+---
+
+## Motivation
+
+The focus of our course is [regression analysis]{.hii}--part of the fundamental toolkit for learning from data.
+
+<br>
+
+. . .
+
+The [underlying theory]{.hi} is critical to grasp the mechanics and pitfalls
+
+- Make us better practitioners and savvier consumers of science.
+
+<br>
+
+. . .
+
+[Today:]{.hi} Review the essential concepts from Math 243
+
+
+
+# [Warning.]{.note}
+
+::: {.middle}
+The following review is a lot packed in very briefly though you _should_ have learned much of it before. But that being said, it will be overwhelming for most.
+::: 
+
+
