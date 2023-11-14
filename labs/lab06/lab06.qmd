@@ -444,5 +444,5 @@ One of my favorite resources on the [CLT]{.hi} is from a YouTube series by 3blue
 
 - [What is the the Central Limit Theorem?](https://www.youtube.com/watch?v=zeJD6dqJ5lo)
 - [A pretty reason why Gaussian + Gaussian = Gaussian](https://www.youtube.com/watch?v=d_qvLDhkg00)
-- [Why $pi$ is in the normal distribution](https://www.youtube.com/watch?v=cy8r7WSuT1I)
+- [Why $\pi$ is in the normal distribution](https://www.youtube.com/watch?v=cy8r7WSuT1I)
 - [What is a convolution](https://www.youtube.com/watch?v=KuXjwB4LzSA)
