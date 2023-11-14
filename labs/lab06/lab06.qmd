@@ -440,7 +440,7 @@ Moreover, the combination of theory and simulation is invaluable in assessing th
 
 ## Resources
 
-One of my favorite resources on the [CLT]{.hi} is from a YouTube series by 3blue1brown](https://www.youtube.com/@3blue1brown). If you would like a better understanding of the normal distribution, the [CLT]{.hi}, and how they related to convolutions and $\pi$, check out this series of videos:
+One of my favorite resources on the [CLT]{.hi} is from a YouTube series by [3blue1brown](https://www.youtube.com/@3blue1brown). If you would like a better understanding of the normal distribution, the [CLT]{.hi}, and how they related to convolutions and $\pi$, check out this series of videos:
 
 - [What is the the Central Limit Theorem?](https://www.youtube.com/watch?v=zeJD6dqJ5lo)
 - [A pretty reason why Gaussian + Gaussian = Gaussian](https://www.youtube.com/watch?v=d_qvLDhkg00)
