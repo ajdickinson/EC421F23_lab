@@ -26,7 +26,7 @@ pacman::p_load(tidyverse, hrbrthemes, nord)
 
 ## Introduction
 
-Econometrics is an essential tool in economics, blending statistical methods with economic theory to analyze economic data. Time series data is a sequence of observations recorded at regular time intervals. This type of data is prevalent and allows us to study economic variables over time, such as GDP, inflation rates, stock prices, and many others.
+Time series data is a sequence of observations recorded at regular time intervals. This type of data is prevalent and allows us to study economic variables over time, such as GDP, inflation rates, stock prices, and many others.
 
 Understanding time series data is crucial for predicting future trends, understanding past behaviors, and making informed decisions in the economic sphere.
 
