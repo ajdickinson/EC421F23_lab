@@ -33,7 +33,7 @@ Lab 05: `ggplot2` (part 2)
 Lab 06: Learning the Central Limit Theorem through simulation
 - [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab06/lab06.html)
 
-
 Lab 07: Simulation exercises
+- [html](https://ajdickinson.github.io/EC421F23_lab/labs/lab07/lab07.html)
 
 Lab 08: Final review
